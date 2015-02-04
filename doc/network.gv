@@ -7,7 +7,11 @@ graph network {
     RA3 [label="Robot A 3"]
     RB1 [label="Robot B 1"]
     RB2 [label="Robot B 2"]
-    CS -- SA [fontsize=12,label="socket"]
+    SN [label="Sniffer"]
+    UI [label="User interface"]
+    CS -- SN [fontsize=12,label="socket"]
+    SN -- UI [fontsize=12,label="socket"]
+    SN -- SA [fontsize=12,label="socket"]
     CS -- SB [fontsize=12,label="socket"]
     SA -- RA1 [fontsize=12,label="stdio"]
     SA -- RA2 [fontsize=12,label="stdio"]
@@ -15,3 +19,5 @@ graph network {
     SB -- RB1 [fontsize=12,label="stdio"]
     SB -- RB2 [fontsize=12,label="stdio"]
 }
+
+// vim: ft=dot
