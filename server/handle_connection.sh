@@ -4,7 +4,6 @@ data_dir=$1
 uuid=$(uuidgen)
 
 source utils.sh
-source object_transfer.sh
 
 echo WELCOME $uuid
 
@@ -13,12 +12,6 @@ do
     read -r line
     out line received: $line
     case $line in
-        REQUEST*)
-            send $line
-            ;;
-        SEND*)
-            receive $line
-            ;;
         ACTION*)
             ;;
         PING*)
