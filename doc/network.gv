@@ -1,0 +1,17 @@
+graph network {
+    CS [label="Central Server"]
+    SA [label="Supervisor A"]
+    SB [label="Supervisor B"]
+    RA1 [label="Robot A 1"]
+    RA2 [label="Robot A 2"]
+    RA3 [label="Robot A 3"]
+    RB1 [label="Robot B 1"]
+    RB2 [label="Robot B 2"]
+    CS -- SA [fontsize=12,label="socket"]
+    CS -- SB [fontsize=12,label="socket"]
+    SA -- RA1 [fontsize=12,label="stdio"]
+    SA -- RA2 [fontsize=12,label="stdio"]
+    SA -- RA3 [fontsize=12,label="stdio"]
+    SB -- RB1 [fontsize=12,label="stdio"]
+    SB -- RB2 [fontsize=12,label="stdio"]
+}
