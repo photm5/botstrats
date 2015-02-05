@@ -5,15 +5,9 @@ data_dir=$1
 
 source $scripts_dir/../utils.sh
 
-function enter_storage ()
+function handle ()
 {
-    mkdir -p $data_dir/robots
     cd $data_dir
-}
-
-function handle_line ()
-{
-    enter_storage
     uuid=$1
     shift
     case $1 in
@@ -39,16 +33,22 @@ function handle_line ()
     esac
 }
 
+function handle_line ()
+{
+    receive
+    handle $line
+}
+
 function main ()
 {
+    mkdir -p $data_dir/robots
     supervisor_uuid=$(uuidgen)
 
     send $(uuidgen) welcome $supervisor_uuid
 
     while true
     do
-        receive
-        handle_line $line
+        handle_line
     done
 }
 
