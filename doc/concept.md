@@ -1,10 +1,17 @@
 # Robots game concept
 
-## Design Rules
+## Design
+
+### Rules
 
 * Keep it simple
 * Do it the Plan 9 way
 * Don't restrict
+
+### Ideas
+
+* Use netcat instead of socket libraries
+* Use shell programming languages
 
 ## network components
 
