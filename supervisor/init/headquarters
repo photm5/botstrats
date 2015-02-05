@@ -1,0 +1,15 @@
+#!/bin/bash
+
+port=2005
+
+function main ()
+{
+    mkfifo from to
+    cat < from &
+    cat > to &
+
+    >&2 echo A lua shell is available on port $port
+    ncat --keep-open --listen $port --sh-exec "lua -v -i 2>&1"
+}
+
+main
