@@ -1,9 +1,10 @@
 #!/bin/bash
 
+scripts_dir=$(cd $(dirname $0); pwd)
 data_dir=$1
 uuid=$(uuidgen)
 
-source utils.sh
+source $scripts_dir/../utils.sh
 
 echo WELCOME $uuid
 
