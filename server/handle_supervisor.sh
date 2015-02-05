@@ -9,28 +9,16 @@ function handle ()
 {
     cd $data_dir
     uuid=$1
-    shift
-    case $1 in
-        spawn)
-            out $supervisor_uuid wants to spawn a $2
-            hq_uuid=$(uuidgen)
-            send $uuid spawn $2 $hq_uuid
-            mkdir robots/$hq_uuid
-            cd robots/$hq_uuid
-            echo $supervisor_uuid > supervisor
-            echo $2 > type
-            ;;
-        action)
-            ;;
-        quit)
-            out Quit by client.
-            send $uuid quit requested
-            exit 0
-            ;;
-        *)
-            send $uuid invalid $*
-            ;;
-    esac
+    command_type=$2
+    command_script=$scripts_dir/commands/$command_type
+    if [[ -e $command_script ]]
+    then
+        shift 2
+        source $command_script
+    else
+        shift 1
+        send $uuid invalid $*
+    fi
 }
 
 function handle_line ()
