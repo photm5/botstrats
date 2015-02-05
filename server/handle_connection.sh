@@ -2,30 +2,54 @@
 
 scripts_dir=$(cd $(dirname $0); pwd)
 data_dir=$1
-uuid=$(uuidgen)
 
 source $scripts_dir/../utils.sh
 
-echo WELCOME $uuid
+function enter_storage ()
+{
+    mkdir -p $data_dir/robots
+    cd $data_dir
+}
 
-while true
-do
-    read -r line
-    out line received: $line
-    case $line in
-        ACTION*)
+function handle_line ()
+{
+    enter_storage
+    uuid=$1
+    shift
+    case $1 in
+        spawn)
+            out $supervisor_uuid wants to spawn a $2
+            hq_uuid=$(uuidgen)
+            send $uuid spawn $2 $hq_uuid
+            mkdir robots/$hq_uuid
+            cd robots/$hq_uuid
+            echo $supervisor_uuid > supervisor
+            echo $2 > type
             ;;
-        PING*)
-            echo $line | sed s/I/O/
+        action)
             ;;
-        QUIT*)
+        quit)
             out Quit by client.
-            echo QUIT REQUESTED
-            break
+            send $uuid quit requested
+            exit 0
             ;;
         *)
-            echo INVALID $line
-            out '(invalid)'
+            send $uuid invalid $*
             ;;
     esac
-done
+}
+
+function main ()
+{
+    supervisor_uuid=$(uuidgen)
+
+    send $(uuidgen) welcome $supervisor_uuid
+
+    while true
+    do
+        receive
+        handle_line $line
+    done
+}
+
+main
