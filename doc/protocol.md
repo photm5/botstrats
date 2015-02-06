@@ -10,7 +10,8 @@
 
 ### Types
 
-* `action <type> <robotuuid>`, SV to CS: A robot starts an action
+* `action <type> <robotuuid> [<information>...]`, SV to CS: A robot starts an action
+* `result <type> <robotuuid> [<information>...]`, SV to CS: A robot starts an action
 * `spawn <type> <robotuuid>`, CS to SV: Spawn a new robot
 
 ## Supervisor <-> Robot
