@@ -5,6 +5,7 @@ robot_type=$1
 {
     sleep 10
 
+    factory_uuid=$from_uuid
     source_script scripts/spawn_robot.sh $robot_type
 
     result success $robot_uuid
