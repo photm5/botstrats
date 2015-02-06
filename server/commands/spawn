@@ -2,15 +2,6 @@
 
 robot_type=$1
 
-out $supervisor_uuid wants to spawn a $robot_type
+out "spawn $robot_type"
 
-robot_uuid=$(uuidgen)
-out Spawning $robot_uuid
-
-send $uuid spawn $robot_type $robot_uuid
-
-mkdir robots/$robot_uuid
-cd robots/$robot_uuid
-
-echo $supervisor_uuid > supervisor
-echo $robot_type > type
+source_script scripts/spawn_robot.sh $robot_type

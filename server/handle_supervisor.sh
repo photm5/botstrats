@@ -4,6 +4,7 @@ scripts_dir=$(cd $(dirname $0); pwd)
 data_dir=$1
 
 source $scripts_dir/../utils.sh
+source $scripts_dir/utils.sh
 
 function handle ()
 {
