@@ -1,8 +1,7 @@
 #!/bin/bash
 
-data_dir=$1
-
 scripts_dir=$(cd $(dirname $0); pwd)
+data_dir=$1
 
 source $scripts_dir/../utils.sh
 
@@ -28,6 +27,7 @@ function handle ()
             cd robots/$3
             echo $2 > type
             mkdir drive
+            mkdir results
             if [[ $2 == headquarters ]]
             then
                 start_robot $3
@@ -35,6 +35,13 @@ function handle ()
             ;;
         start)
             start_robot $2
+            ;;
+        result)
+            action_type=$2
+            robot_uuid=$3
+            shift 3
+            cd robots/$robot_uuid/results
+            echo $* > $uuid
             ;;
     esac
 }

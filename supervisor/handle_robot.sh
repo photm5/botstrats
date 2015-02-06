@@ -1,21 +1,22 @@
 #!/bin/bash
 
 scripts_dir=$(cd $(dirname $0); pwd)
-
 data_dir=$1
 robot_uuid=$2
+
+source $scripts_dir/../utils.sh
 
 cd $data_dir/robots/$2
 
 robot_type=$(cat type)
 
-source $scripts_dir/../utils.sh
-
 function send_action ()
 {
     cd $data_dir/message_queue
     uuid=$(uuidgen)
-    echo "$uuid $*" > $uuid
+    action_type=$1
+    shift
+    echo "$uuid action $action_type $robot_uuid $*" > $uuid
 }
 
 function handle ()
@@ -36,20 +37,39 @@ function handle_line ()
     handle $line
 }
 
+function check_results ()
+{
+    cd $data_dir/robots/$robot_uuid/results/
+    while true
+    do
+        file_name=$(find -type f | sed q)
+        if [[ $file_name != '' ]]
+        then
+            send $(cat $file_name)
+            rm $file_name
+        else
+            break
+        fi
+    done
+}
+
 function handle_robot ()
 {
     while true
     do
-        handle_line
+        if read -t 0
+        then
+            handle_line
+        fi
+        check_results
     done
 }
 
 function main ()
 {
-    if [[ -e $scripts_dir/init/$robot_type ]]
+    if [[ -d $scripts_dir/init/$robot_type ]]
     then
-        cp $scripts_dir/init/$robot_type drive/init
-        chmod +x drive/init
+        rsync $scripts_dir/init/$robot_type/ drive/ -a -q
     fi
 
     mkfifo fifo
