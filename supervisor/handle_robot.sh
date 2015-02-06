@@ -62,6 +62,7 @@ function handle_robot ()
             handle_line
         fi
         check_results
+        sleep 0.001
     done
 }
 

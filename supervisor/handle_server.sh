@@ -83,6 +83,7 @@ function main ()
         else
             flush_message_queue
         fi
+        sleep 0.0001
     done
     send $(uuidgen) quit
 }
