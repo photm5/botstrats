@@ -28,6 +28,9 @@ function handle ()
             echo $2 > type
             mkdir drive
             mkdir results
+            mkdir position
+            echo $4 > position/x
+            echo $5 > position/y
             if [[ $2 == headquarters ]]
             then
                 start_robot $3
