@@ -1,0 +1,11 @@
+#!/bin/bash
+
+robot_type=$1
+
+{
+    sleep 10
+
+    source_script scripts/spawn_robot.sh $robot_type
+
+    result success $robot_uuid
+} &

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+action_type=$1
+from_uuid=$2
+shift 2
+
+from_type=$(cat $data_dir/robots/$from_uuid/type)
+
+function result ()
+{
+    send $uuid result $action_type $from_uuid $*
+}
+
+if [[ -e $scripts_dir/actions/$action_type/allowed_types/$from_type ]]
+then
+    source $scripts_dir/actions/$action_type/script
+else
+    result 'failure no such action for your type'
+fi
