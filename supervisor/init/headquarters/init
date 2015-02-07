@@ -4,12 +4,19 @@ port=2005
 
 function main ()
 {
-    mkfifo actions results
-    cat < actions &
-    cat > results &
-
     >&2 echo A lua shell is available on port $port
-    ncat --keep-open --listen $port --sh-exec "lua -v -i 2>&1"
+    while true
+    do
+        mkfifo actions results
+        cat < actions &
+        cat > results &
+        ncat --listen $port --sh-exec "lua -v -i 2>&1"
+        rm actions results
+        while read process_id
+        do
+            kill $process_id
+        done < <(jobs -r -p)
+    done 2>/dev/null
 }
 
 main
