@@ -1,16 +1,15 @@
 #!/bin/bash
 
-robot_type=$1
-
 {
-    if [[ $robot_type != headquarters ]]
-    then
-        sleep 2
-    fi
+    sleep $(cat $scripts_dir/actions/scan/costs/$from_type)
+
+    range=$(cat $scripts_dir/actions/scan/ranges/$from_type)
 
     cd robots
     while read robot_uuid
     do
+        robot_distance $from_uuid $robot_uuid
+        [[ $distance -lt $range ]] || continue
         cd $robot_uuid
         new=$({
             printf '{"type":"%s",' $(cat type)
