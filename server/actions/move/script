@@ -1,0 +1,34 @@
+#!/bin/bash
+
+direction=$1
+
+{
+    sleep $(cat $scripts_dir/actions/move/costs/$from_type)
+
+    cd $data_dir/robots/$from_uuid/position
+    new_x=$(cat x)
+    new_y=$(cat y)
+    case $direction in
+        north)
+            new_y=$(($new_y - 1))
+            ;;
+        east)
+            new_x=$(($new_x + 1))
+            ;;
+        south)
+            new_y=$(($new_y + 1))
+            ;;
+        west)
+            new_x=$(($new_x - 1))
+            ;;
+    esac
+    if [[ -f $data_dir/position_map/$new_x:$new_y ]]
+    then
+        result failure 'the new position is occupied'
+    else
+        mv $data_dir/position_map/{$(cat x):$(cat y),$new_x:$new_y}
+        echo $new_x > x
+        echo $new_y > y
+        result success
+    fi
+} &
