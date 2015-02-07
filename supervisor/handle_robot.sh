@@ -21,14 +21,7 @@ function send_action ()
 
 function handle ()
 {
-    out $*
-    case $1 in
-        spawn)
-            robot_type=$2
-            [[ $robot_type == '' ]] && return
-            send_action spawn $robot_type
-            ;;
-    esac
+    send_action $*
 }
 
 function handle_line ()
