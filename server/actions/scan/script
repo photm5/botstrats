@@ -5,26 +5,22 @@
 
     range=$(cat $scripts_dir/actions/scan/ranges/$from_type)
 
+    result "success begin_of_stream"
+
     cd robots
     while read robot_uuid
     do
         robot_distance $from_uuid $robot_uuid
         [[ $distance -lt $range ]] || continue
         cd $robot_uuid
-        new=$({
+        result $({
             printf '{"type":"%s",' $(cat type)
             printf '"x":"%s",' $(cat position/x)
             printf '"y":"%s",' $(cat position/y)
             printf '"uuid":"%s"}' $robot_uuid
         })
-        if [[ $results ]]
-        then
-            results="$results,$new"
-        else
-            results="$new"
-        fi
         cd ..
     done < <(ls -1)
 
-    result "success [$results]"
+    result "end_of_stream"
 } &

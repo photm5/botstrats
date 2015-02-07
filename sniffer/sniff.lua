@@ -38,8 +38,9 @@ function repeated_find ( str, pattern, num )
     return start_index, end_index
 end
 
--- <uuid> result scan <uuid> success <json>
+-- <uuid> result scan <uuid> success ...
 
+in_stream = true
 while true do
     line = io.read ()
     if not line then break end
@@ -48,9 +49,9 @@ while true do
         return string.sub ( line, line_find ( num - 1 ) + 1, line_find ( num ) - 1 )
     end
     if line_field ( 2 ) == 'result' and line_field ( 3 ) == 'scan' then
-        json_string = string.sub ( line, line_find ( 5 ) + 1, -1 )
-        scan_results = cjson.decode ( json_string )
-        for _, robot in pairs ( scan_results ) do
+        content = string.sub ( line, line_find ( 4 ) + 1, -1 )
+        if content ~= 'success begin_of_stream' and content ~= 'end_of_stream' then
+            robot = cjson.decode ( content )
             print ( table.concat ( { robot.uuid, 'res/'..robot.type..'.png', 100, 100, robot.x * 100, robot.y * 100, 100000 }, ' ' ) )
         end
     end
