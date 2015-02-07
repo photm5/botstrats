@@ -1,5 +1,15 @@
 #!/bin/bash
 
+function abs ()
+{
+    if [[ $1 -lt 0 ]]
+    then
+        echo $((- $1))
+    else
+        echo $1
+    fi
+}
+
 function flush_message_queue ()
 {
     cd $1
