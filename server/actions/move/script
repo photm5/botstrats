@@ -3,7 +3,7 @@
 direction=$1
 
 {
-    sleep $(cat $scripts_dir/actions/move/costs/$from_type)
+    sleep $cost
 
     cd $data_dir/robots/$from_uuid/position
     new_x=$(cat x)

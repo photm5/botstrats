@@ -11,10 +11,12 @@ target_y=$(cat $data_dir/robots/$target_uuid/position/y)
 offset_x=$(($from_x - $target_x))
 offset_y=$(($from_y - $target_y))
 
-if [[ $(abs $offset_x) -lt 6 && $(abs $offset_y) -lt 6 ]]
+read_property range
+
+if [[ $(abs $offset_x) -le $range && $(abs $offset_y) -le range ]]
 then
     {
-        sleep 10
+        sleep $cost
 
         send $uuid start $target_uuid
         result success

@@ -1,9 +1,9 @@
 #!/bin/bash
 
 {
-    sleep $(cat $scripts_dir/actions/scan/costs/$from_type)
+    sleep $cost
 
-    range=$(cat $scripts_dir/actions/scan/ranges/$from_type)
+    read_property range
 
     result "success begin_of_stream"
 

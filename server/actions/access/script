@@ -3,9 +3,9 @@
 target_uuid=$1
 
 {
-    sleep $(cat $scripts_dir/actions/access/costs/$from_type)
+    sleep $cost
 
-    range=$(cat $scripts_dir/actions/access/ranges/$from_type)
+    read_property range
 
     robot_distance $from_uuid $target_uuid
     if [[ $distance -le $range ]]
