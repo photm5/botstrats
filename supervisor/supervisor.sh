@@ -3,7 +3,7 @@
 scripts_dir=$(cd $(dirname $0); pwd)
 
 host=localhost
-port=2000
+port=2001
 
 data_dir=$scripts_dir/data_dir/
 
