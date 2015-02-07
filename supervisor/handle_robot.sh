@@ -30,22 +30,6 @@ function handle_line ()
     handle $line
 }
 
-function check_results ()
-{
-    cd $data_dir/robots/$robot_uuid/results/
-    while true
-    do
-        file_name=$(find -type f | sed q)
-        if [[ $file_name != '' ]]
-        then
-            send $(cat $file_name)
-            rm $file_name
-        else
-            break
-        fi
-    done
-}
-
 function handle_robot ()
 {
     while true
@@ -53,8 +37,9 @@ function handle_robot ()
         if read -t 0
         then
             handle_line
+        else
+            flush_message_queue $data_dir/robots/$robot_uuid/results
         fi
-        check_results
         sleep 0.001
     done
 }
@@ -70,8 +55,6 @@ function main ()
     cd drive/
 
     cat ../fifo | ./init | handle_robot > ../fifo
-
-    rm ../fifo
 }
 
 main
