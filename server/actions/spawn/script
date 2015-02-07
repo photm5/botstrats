@@ -2,11 +2,16 @@
 
 robot_type=$1
 
-{
-    sleep 10
+if [[ ! -f $scripts_dir/actions/spawn/type_table/$from_type/$robot_type ]]
+then
+    result failure 'you may not spawn that type of robot'
+else
+    {
+        sleep 10
 
-    factory_uuid=$from_uuid
-    source_script scripts/spawn_robot.sh $robot_type
+        factory_uuid=$from_uuid
+        source_script scripts/spawn_robot.sh $robot_type
 
-    result success $robot_uuid
-} &
+        result success $robot_uuid
+    } &
+fi
