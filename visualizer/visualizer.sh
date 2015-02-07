@@ -1,6 +1,9 @@
 #!/bin/bash
 
+scripts_dir=$(cd $(dirname $0); pwd)
 port=2047
+
+cd $scripts_dir
 
 ./visualizer.lua &
 
