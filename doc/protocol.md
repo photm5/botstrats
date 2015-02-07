@@ -10,9 +10,20 @@
 
 ### Types
 
-* `action <type> <robotuuid> [<information>...]`, SV to CS: A robot starts an action
-* `result <type> <robotuuid> [<information>...]`, SV to CS: A robot starts an action
-* `spawn <type> <robotuuid>`, CS to SV: Spawn a new robot
+#### Supervisor to Server
+
+* `action <type> <robotuuid> [<information>...]`: A robot starts an action
+* `spawn <type> <robotuuid> [<information>...]`: Spawn a robot under my control
+
+#### Server to Supervisor
+
+* `result <type> <robotuuid> [<information>...]`: The result of an action
+* `access <target> <from> <target_supervisor>`: Special result of acces action,
+  mount remote robot drive or determine local location and send that path to the
+  robot
+* `open_ftp <robotuuid>`: Start an ftp server serving the drive of that robot
+* `spawn <type> <robotuuid>`: Spawn a robot under your control
+* `start <robotuuid>`: Start a robot under your control
 
 ## Supervisor <-> Robot
 

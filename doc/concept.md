@@ -12,6 +12,7 @@
 
 * Use netcat instead of socket libraries
 * Use shell programming languages
+* Save world as files, even while the game is running
 
 ## network components
 
