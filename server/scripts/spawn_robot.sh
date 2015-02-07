@@ -27,15 +27,11 @@ cd $data_dir/robots
 while true
 do
     gen_position
-    while read other_uuid
-    do
-        [[ $pos_x == $(cat $other_uuid/position/x) &&
-        $pos_y == $(cat $other_uuid/position/y) ]] && continue 2
-    done < <(ls -1)
+    [[ -f $data_dir/position_map/$pos_x:$pos_y ]] && continue
     break
 done
 
-send $uuid spawn $robot_type $robot_uuid $pos_x $pos_y
+send $uuid spawn $robot_type $robot_uuid
 
 mkdir $robot_uuid
 cd $robot_uuid
@@ -46,3 +42,6 @@ echo $robot_type > type
 mkdir position
 echo $pos_x > position/x
 echo $pos_y > position/y
+
+mkdir -p $data_dir/position_map
+echo $robot_uuid > $data_dir/position_map/$pos_x:$pos_y
