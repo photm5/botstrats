@@ -9,8 +9,8 @@ then
     factory_pos_x=$(cat robots/$factory_uuid/position/x)
     factory_pos_y=$(cat robots/$factory_uuid/position/y)
 else
-    factory_pos_x=$(($RANDOM % 500 - 250))
-    factory_pos_y=$(($RANDOM % 500 - 250))
+    factory_pos_x=$(($RANDOM % 200 - 100))
+    factory_pos_y=$(($RANDOM % 200 - 100))
 fi
 
 offset_x=$(($RANDOM % 10 - 5))
