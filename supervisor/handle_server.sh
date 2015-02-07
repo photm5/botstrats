@@ -15,51 +15,16 @@ function handle ()
 {
     cd $data_dir
     uuid=$1
-    shift
-    case $1 in
-        welcome)
-            out I am $2
-            my_id=$2
-            ;;
-        spawn)
-            out Spawning robot $2 $3
-            mkdir robots/$3
-            cd robots/$3
-            echo $2 > type
-            mkdir drive
-            mkdir results
-            if [[ $2 == headquarters ]]
-            then
-                start_robot $3
-            fi
-            ;;
-        start)
-            start_robot $2
-            ;;
-        result)
-            action_type=$2
-            robot_uuid=$3
-            shift 3
-            cd robots/$robot_uuid/results
-            echo $* > $uuid
-            ;;
-        access)
-            target_uuid=$2
-            from_uuid=$3
-            supervisor_uuid=$4
-            cd robots/$from_uuid/results
-            if [[ $supervisor_uuid == $my_id ]]
-            then
-                echo success $data_dir/robots/$target_uuid/drive/ > $uuid
-            else
-                out 'Not yet implemented: mount ftp server'
-                echo failure not yet implemented > $uuid
-            fi
-            ;;
-        open_ftp)
-            out 'Not yet implemented: start ftp server'
-            ;;
-    esac
+    command_type=$2
+    command_script=$scripts_dir/commands/$command_type
+    if [[ -e $command_script ]]
+    then
+        shift 2
+        source $command_script
+    else
+        shift 1
+        send $uuid invalid $*
+    fi
 }
 
 function handle_line ()

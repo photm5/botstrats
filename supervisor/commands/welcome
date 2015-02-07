@@ -1,0 +1,5 @@
+#!/bin/bash
+
+my_id=$1
+
+out I am $my_id

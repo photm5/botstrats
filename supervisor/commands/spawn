@@ -1,0 +1,19 @@
+#!/bin/bash
+
+robot_type=$1
+robot_uuid=$2
+
+out "Spawning $robot_uuid of type $robot_type"
+
+mkdir robots/$robot_uuid
+cd robots/$robot_uuid
+
+echo $robot_type > type
+
+mkdir results
+mkdir drive
+
+if [[ $robot_type == headquarters ]]
+then
+    start_robot $robot_uuid
+fi
