@@ -8,21 +8,24 @@ robot_type=$1
         sleep 2
     fi
 
-    tmpfile=$(mktemp)
-
     cd robots
     while read robot_uuid
     do
         cd $robot_uuid
-        {
+        new=$({
             printf '{"type":"%s",' $(cat type)
             printf '"x":"%s",' $(cat position/x)
             printf '"y":"%s",' $(cat position/y)
-            printf '"uuid":"%s"},' $robot_uuid
-        } >> $tmpfile
+            printf '"uuid":"%s"}' $robot_uuid
+        })
+        if [[ $results ]]
+        then
+            results="$results,$new"
+        else
+            results="$new"
+        fi
         cd ..
     done < <(ls -1)
 
-    result "success [$(cat $tmpfile | sed s/.$//)]"
-    rm $tmpfile
+    result "success [$results]"
 } &
