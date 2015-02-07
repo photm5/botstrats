@@ -67,7 +67,7 @@ function main ()
         else
             flush_message_queue $data_dir/message_queue
         fi
-        sleep 0.0001
+        sleep 0.01
     done
     send $(uuidgen) quit
 }
