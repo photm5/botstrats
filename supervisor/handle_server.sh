@@ -43,6 +43,22 @@ function handle ()
             cd robots/$robot_uuid/results
             echo $* > $uuid
             ;;
+        access)
+            target_uuid=$2
+            from_uuid=$3
+            supervisor_uuid=$4
+            cd robots/$from_uuid/results
+            if [[ $supervisor_uuid == $my_id ]]
+            then
+                echo success $data_dir/robots/$target_uuid/drive/ > $uuid
+            else
+                out 'Not yet implemented: mount ftp server'
+                echo failure not yet implemented > $uuid
+            fi
+            ;;
+        open_ftp)
+            out 'Not yet implemented: start ftp server'
+            ;;
     esac
 }
 
