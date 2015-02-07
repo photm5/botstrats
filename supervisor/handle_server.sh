@@ -52,22 +52,6 @@ function handle_line ()
     handle $line
 }
 
-function flush_message_queue ()
-{
-    cd $data_dir/message_queue
-    while true
-    do
-        file_name=$(find -type f | sed q)
-        if [[ $file_name != '' ]]
-        then
-            send $(cat $file_name)
-            rm $file_name
-        else
-            break
-        fi
-    done
-}
-
 function main ()
 {
     mkdir -p $data_dir/{robots,message_queue}
@@ -81,7 +65,7 @@ function main ()
         then
             handle_line
         else
-            flush_message_queue
+            flush_message_queue $data_dir/message_queue
         fi
         sleep 0.0001
     done
