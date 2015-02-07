@@ -4,9 +4,9 @@ port=2005
 
 function main ()
 {
-    mkfifo from to
-    cat < from &
-    cat > to &
+    mkfifo actions results
+    cat < actions &
+    cat > results &
 
     >&2 echo A lua shell is available on port $port
     ncat --keep-open --listen $port --sh-exec "lua -v -i 2>&1"
