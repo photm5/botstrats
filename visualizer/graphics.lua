@@ -31,7 +31,10 @@ local function initialize ()
 end
 
 local function loadTexture ( path )
-    local surface = errhandle ( image.load ( path ) )
+    local surface = image.load ( path )
+    if not surface then
+        return loadTexture ( 'res/missing.png' )
+    end
     local texture = errhandle ( renderer:createTextureFromSurface ( surface ) )
     return texture
 end
