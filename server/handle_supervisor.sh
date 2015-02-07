@@ -30,14 +30,21 @@ function handle_line ()
 
 function main ()
 {
-    mkdir -p $data_dir/robots
     supervisor_uuid=$(uuidgen)
+
+    mkdir -p $data_dir/{robots,message_queues/$supervisor_uuid}
 
     send $(uuidgen) welcome $supervisor_uuid
 
     while true
     do
-        handle_line
+        if read -t 0
+        then
+            handle_line
+        else
+            flush_message_queue $data_dir/message_queues/$supervisor_uuid/
+        fi
+        sleep 0.01
     done
 }
 
