@@ -1,5 +1,0 @@
-#!/bin/bash
-
-out Quit by client.
-send $uuid quit requested
-exit 0

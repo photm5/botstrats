@@ -69,7 +69,6 @@ function main ()
         fi
         sleep 0.01
     done
-    send $(uuidgen) quit
 }
 
 main
