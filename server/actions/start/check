@@ -2,6 +2,12 @@
 
 target_uuid=$1
 
+if [[ $(cat $data_dir/robots/$target_uuid/status) != off ]]
+then
+    result failure 'target robot not off'
+    return 1
+fi
+
 from_x=$(cat $data_dir/robots/$from_uuid/position/x)
 from_y=$(cat $data_dir/robots/$from_uuid/position/y)
 

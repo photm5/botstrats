@@ -45,3 +45,10 @@ echo $pos_y > position/y
 
 mkdir -p $data_dir/position_map
 echo $robot_uuid > $data_dir/position_map/$pos_x:$pos_y
+
+if [[ $robot_type == headquarters ]]
+then
+    echo idle > status
+else
+    echo off > status
+fi
