@@ -1,26 +1,22 @@
 #!/bin/bash
 
-{
-    sleep $cost
+read_property range
 
-    read_property range
+result "success begin_of_stream"
 
-    result "success begin_of_stream"
+cd robots
+while read robot_uuid
+do
+    robot_distance $from_uuid $robot_uuid
+    [[ $distance -lt $range ]] || continue
+    cd $robot_uuid
+    result $({
+        printf '{"type":"%s",' $(cat type)
+        printf '"x":"%s",' $(cat position/x)
+        printf '"y":"%s",' $(cat position/y)
+        printf '"uuid":"%s"}' $robot_uuid
+    })
+    cd ..
+done < <(ls -1)
 
-    cd robots
-    while read robot_uuid
-    do
-        robot_distance $from_uuid $robot_uuid
-        [[ $distance -lt $range ]] || continue
-        cd $robot_uuid
-        result $({
-            printf '{"type":"%s",' $(cat type)
-            printf '"x":"%s",' $(cat position/x)
-            printf '"y":"%s",' $(cat position/y)
-            printf '"uuid":"%s"}' $robot_uuid
-        })
-        cd ..
-    done < <(ls -1)
-
-    result "end_of_stream"
-} &
+result "end_of_stream"

@@ -1,26 +1,4 @@
 #!/bin/bash
 
-target_uuid=$1
-
-from_x=$(cat $data_dir/robots/$from_uuid/position/x)
-from_y=$(cat $data_dir/robots/$from_uuid/position/y)
-
-target_x=$(cat $data_dir/robots/$target_uuid/position/x)
-target_y=$(cat $data_dir/robots/$target_uuid/position/y)
-
-offset_x=$(($from_x - $target_x))
-offset_y=$(($from_y - $target_y))
-
-read_property range
-
-if [[ $(abs $offset_x) -le $range && $(abs $offset_y) -le range ]]
-then
-    {
-        sleep $cost
-
-        send $uuid start $target_uuid
-        result success
-    } &
-else
-    result failure 'target robot too far away'
-fi
+send $uuid start $target_uuid
+result success

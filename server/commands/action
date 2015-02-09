@@ -21,10 +21,25 @@ function read_property ()
     fi
 }
 
+function source_check ()
+{
+    if [[ -f $scripts_dir/actions/$action_type/check ]]
+    then
+        source $scripts_dir/actions/$action_type/check
+        return $?
+    else
+        return 0
+    fi
+}
+
 if [[ -e $scripts_dir/actions/$action_type/allowed_types/$from_type ]]
 then
     read_property cost
-    source $scripts_dir/actions/$action_type/script
+    if source_check $*
+    then
+        sleep $cost
+        source $scripts_dir/actions/$action_type/script &
+    fi
 else
     result 'failure no such action for your type'
 fi

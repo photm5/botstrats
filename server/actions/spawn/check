@@ -1,0 +1,11 @@
+#!/bin/bash
+
+robot_type=$1
+
+if [[ ! -f $scripts_dir/actions/spawn/type_table/$from_type/$robot_type ]]
+then
+    result failure 'you may not spawn that type of robot'
+    return 1
+else
+    return 0
+fi

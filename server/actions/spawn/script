@@ -1,17 +1,6 @@
 #!/bin/bash
 
-robot_type=$1
+factory_uuid=$from_uuid
+source_script scripts/spawn_robot.sh $robot_type
 
-if [[ ! -f $scripts_dir/actions/spawn/type_table/$from_type/$robot_type ]]
-then
-    result failure 'you may not spawn that type of robot'
-else
-    {
-        sleep $cost
-
-        factory_uuid=$from_uuid
-        source_script scripts/spawn_robot.sh $robot_type
-
-        result success $robot_uuid
-    } &
-fi
+result success $robot_uuid
