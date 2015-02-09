@@ -7,13 +7,13 @@ new_x=$(cat x)
 new_y=$(cat y)
 case $direction in
     north)
-        new_y=$(($new_y - 1))
+        new_y=$(($new_y + 1))
         ;;
     east)
         new_x=$(($new_x + 1))
         ;;
     south)
-        new_y=$(($new_y + 1))
+        new_y=$(($new_y - 1))
         ;;
     west)
         new_x=$(($new_x - 1))
