@@ -32,7 +32,7 @@ function handle_line ()
 
 function handle_robot ()
 {
-    while true
+    while [[ $(jobs -r | wc -l) == 1 ]]
     do
         if read -t 0
         then
@@ -51,10 +51,16 @@ function main ()
         rsync $scripts_dir/init/$robot_type/ drive/ -a -q
     fi
 
-    mkfifo fifo
+    rm -f from to
+    mkfifo from to
     cd drive/
 
-    cat ../fifo | ./init | handle_robot > ../fifo
+    ./init > ../from < ../to &
+    handle_robot < ../from > ../to
+
+    cd $data_dir/message_queue
+    uuid=$(uuidgen)
+    echo "$uuid robot_stopped $robot_uuid" > $uuid
 }
 
 main

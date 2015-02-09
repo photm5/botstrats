@@ -14,6 +14,7 @@
 
 * `action <type> <robotuuid> [<information>...]`: A robot starts an action
 * `spawn <type> <robotuuid> [<information>...]`: Spawn a robot under my control
+* `robot_stopped <robotuuid>`: A robot under my control has stopped running
 
 #### Server to Supervisor
 

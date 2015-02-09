@@ -1,0 +1,5 @@
+#!/bin/bash
+
+robot_uuid=$1
+
+echo off > $data_dir/robots/$robot_uuid/status
