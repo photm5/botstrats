@@ -15,9 +15,9 @@ function read_property ()
 {
     if [[ -f $scripts_dir/actions/$action_type/$1 ]]
     then
-        let $1=$(cat $scripts_dir/actions/$action_type/$1)
+        source $scripts_dir/actions/$action_type/$1
     else
-        let $1=$(cat $scripts_dir/actions/$action_type/${1}s/$from_type)
+        source $scripts_dir/actions/$action_type/${1}s/$from_type
     fi
 }
 
