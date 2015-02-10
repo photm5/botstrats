@@ -1,6 +1,7 @@
 #!/bin/bash
 
 factory_uuid=$from_uuid
-source_script scripts/spawn_robot.sh $robot_type
+
+source_script scripts/spawn_robot.sh $robot_type $pos_x $pos_y
 
 result success $robot_uuid

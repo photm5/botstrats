@@ -2,6 +2,9 @@
 
 robot_type=$1
 
+pos_x=$2
+pos_y=$3
+
 robot_uuid=$(uuidgen)
 
 function gen_position ()
@@ -24,12 +27,15 @@ function gen_position ()
 
 cd $data_dir/robots
 
-while true
-do
-    gen_position
-    [[ -f $data_dir/position_map/$pos_x:$pos_y ]] && continue
-    break
-done
+if [[ ! ( $pos_x && $pos_y ) ]]
+then
+    while true
+    do
+        gen_position
+        [[ -f $data_dir/position_map/$pos_x:$pos_y ]] && continue
+        break
+    done
+fi
 
 send $uuid spawn $robot_type $robot_uuid
 
