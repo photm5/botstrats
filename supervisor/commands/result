@@ -6,4 +6,4 @@ robot_uuid=$2
 shift 2
 
 cd robots/$robot_uuid/results
-echo $* > $(uuidgen)
+echo $* > $(($(ls -1 | tail -n 1) + 1))
