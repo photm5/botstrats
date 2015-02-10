@@ -3,27 +3,27 @@
 direction=$1
 
 cd $data_dir/robots/$from_uuid/position
-new_x=$(cat x)
-new_y=$(cat y)
+let {new,old}_x=$(cat x)
+let {new,old}_y=$(cat y)
 case $direction in
     north)
-        new_y=$(($new_y + 1))
+        new_y=$(($old_y + 1))
         ;;
     east)
-        new_x=$(($new_x + 1))
+        new_x=$(($old_x + 1))
         ;;
     south)
-        new_y=$(($new_y - 1))
+        new_y=$(($old_y - 1))
         ;;
     west)
-        new_x=$(($new_x - 1))
+        new_x=$(($old_x - 1))
         ;;
 esac
 if [[ -f $data_dir/position_map/$new_x:$new_y ]]
 then
     result failure 'the new position is occupied'
 else
-    mv $data_dir/position_map/{$(cat x):$(cat y),$new_x:$new_y}
+    mv $data_dir/position_map/{$old_x:$old_y,$new_x:$new_y}
     echo $new_x > x
     echo $new_y > y
     result success
