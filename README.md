@@ -28,7 +28,7 @@ on the headquarter, and start actions that way.
 * inkscape, for rendering svg images
 * gnu make
 * netcat (Invoked as both `ncat` and `nc`. Whenever the `--sh-exec` option is
-  needed, `ncat` is used.)
+  needed, `ncat` is used.) (Both the gnu and the openbsd implementation work)
 * rlwrap, If you want some commandline editing in your headquarter lua prompt.
 
 This has only been tested on archlinux. If you successfully tried it on
