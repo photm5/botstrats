@@ -68,4 +68,5 @@ Controls in the visualizer:
 | O   | Zoom out      |
 
 You will want to zoom out until you see the headquarters building, and then
-navigate to it. It is spawned at a random location.
+navigate to it. It is spawned at a random location. You cannot see the building
+until you have started the `scan` action in the lua prompt.
