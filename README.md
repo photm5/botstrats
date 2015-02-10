@@ -29,6 +29,43 @@ on the headquarter, and start actions that way.
 * gnu make
 * netcat (Invoked as both `ncat` and `nc`. Whenever the `--sh-exec` option is
   needed, `ncat` is used.)
+* rlwrap, If you want some commandline editing in your headquarter lua prompt.
 
 This has only been tested on archlinux. If you successfully tried it on
 something else, please open an issue so I can mention it here.
+
+## quick try
+
+You will need a lot of different terminals (or tmux windows/panes):
+
+* `./server/server.sh`
+* `./sniffer/sniffer.sh`
+* `./visualizer/visualizer.sh`
+* `./supervisor/supervisor.sh`
+* `rlwrap nc localhost 2005`
+
+In the lua prompt:
+```lua
+actions = io.open ( 'actions', 'a' )
+results = io.open ( 'results', 'r' )
+
+actions:write ( 'scan\n' ) actions:flush ()
+repeat
+    res = result:read ()
+    print ( res )
+until res == 'end_of_stream'
+```
+
+Controls in the visualizer:
+
+| Key | Effect        |
+| --- | ------------- |
+| W   | Scroll up     |
+| A   | Scroll left   |
+| S   | Scroll down   |
+| D   | Scroll right  |
+| I   | Zoom in       |
+| O   | Zoom out      |
+
+You will want to zoom out until you see the headquarters building, and then
+navigate to it. It is spawned at a random location.
