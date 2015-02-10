@@ -17,7 +17,7 @@ graphics.eventHandlers [ SDL.event.KeyDown ] = function ( e )
     keyboardState [ e.keysym.sym ] = true
 end
 graphics.eventHandlers [ SDL.event.KeyUp ] = function ( e )
-    keyboardState [ e.keysym.sym ] = falsE
+    keyboardState [ e.keysym.sym ] = false
 end
 
 function checkKeys ()
