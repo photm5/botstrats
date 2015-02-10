@@ -13,6 +13,10 @@ function abs ()
 function flush_message_queue ()
 {
     cd $1
+    if [[ $(find -type f | wc -l) == 0 ]]
+    then
+        return 1
+    fi
     while true
     do
         file_name=$(find -type f | sed q)

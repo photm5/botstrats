@@ -42,9 +42,13 @@ function main ()
         then
             handle_line
         else
-            flush_message_queue $data_dir/message_queues/$supervisor_uuid/
+            if flush_message_queue $data_dir/message_queues/$supervisor_uuid/
+            then
+                : # messages were sent
+            else
+                sleep 0.1
+            fi
         fi
-        sleep 0.01
     done
 }
 

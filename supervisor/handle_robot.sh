@@ -38,9 +38,13 @@ function handle_robot ()
         then
             handle_line
         else
-            flush_message_queue $data_dir/robots/$robot_uuid/results
+            if flush_message_queue $data_dir/robots/$robot_uuid/results
+            then
+                : # results where found
+            else
+                sleep 0.1
+            fi
         fi
-        sleep 0.001
     done
 }
 
