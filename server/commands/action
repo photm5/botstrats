@@ -16,8 +16,11 @@ function read_property ()
     if [[ -f $scripts_dir/actions/$action_type/$1 ]]
     then
         source $scripts_dir/actions/$action_type/$1
-    else
+    elif [[ -f $scripts_dir/actions/$action_type/${1}s/$from_type ]]
+    then
         source $scripts_dir/actions/$action_type/${1}s/$from_type
+    else
+        let "$1=$2"
     fi
 }
 
@@ -34,7 +37,7 @@ function source_check ()
 
 if [[ -e $scripts_dir/actions/$action_type/allowed_types/$from_type ]]
 then
-    read_property cost
+    read_property cost 0
     if source_check $*
     then
         {
