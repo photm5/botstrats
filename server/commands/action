@@ -37,10 +37,10 @@ function source_check ()
 
 if [[ -e $scripts_dir/actions/$action_type/allowed_types/$from_type ]]
 then
-    read_property cost 0
     if source_check $*
     then
         {
+            read_property cost 0
             echo $action_type > $data_dir/robots/$from_uuid/status
             sleep $cost
             source $scripts_dir/actions/$action_type/script

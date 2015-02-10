@@ -1,1 +1,2 @@
-cost=10
+#!/bin/bash
+cost=$(cat $scripts_dir/actions/spawn/type_table/$robot_type)
