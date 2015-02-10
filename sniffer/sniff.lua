@@ -40,6 +40,9 @@ end
 
 -- <uuid> result scan <uuid> success ...
 
+size = 500
+ticks = 100000
+
 in_stream = true
 while true do
     line = io.read ()
@@ -52,7 +55,7 @@ while true do
         content = string.sub ( line, line_find ( 4 ) + 1, -1 )
         if content ~= 'success begin_of_stream' and content ~= 'end_of_stream' then
             robot = cjson.decode ( content )
-            print ( table.concat ( { robot.uuid, 'res/'..robot.type..'.png', 100, 100, robot.x * 100, robot.y * -100, 100000 }, ' ' ) )
+            print ( table.concat ( { robot.uuid, '../resources/'..robot.type..':'..robot.status..'.png', size, size, robot.x * size, robot.y * -size, ticks }, ' ' ) )
         end
     end
 end
