@@ -52,7 +52,7 @@ results = io.open ( 'results', 'r' )
 
 actions:write ( 'scan\n' ) actions:flush ()
 repeat
-    res = result:read ()
+    res = results:read ()
     print ( res )
 until res == 'end_of_stream'
 ```
