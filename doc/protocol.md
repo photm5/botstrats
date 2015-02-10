@@ -26,12 +26,55 @@
 * `spawn <type> <robotuuid>`: Spawn a robot under your control
 * `start <robotuuid>`: Start a robot under your control
 
-## Supervisor <-> Robot
+## Robot -> Supervisor
 
 ### Basic structure
 
 ```
 <actiontype> [<information>...]
+```
+
+### Types
+
+* `move <north/east/south/west>`: engineer, specialist  
+    Move in that direction
+* `access <uuid>`: specialist, factory, headquarters  
+    Return a path under which the drive of that robot can be accessed
+* `start <uuid>`: specialist, factory, headquarters  
+    Start that robot under the control of my supervisor
+* `spawn <type> [<x> <y>]`: engineer, factory, headquarters  
+    Spawn a robot of that type at that position and return its uuid
+* `query`: *everyone*  
+    Return json-formatted information about me. Example:
+```
+success {"type":"headquarters","uuid":"8800a95b-12b3-454a-b527-7df0fc07501f","x":"-27","y":"4"}
+```
+* `scan`: *everyone*  
+    Return json-formatted information about the robots surrounding me as a
+    stream. Example:
+```
+success begin_of_stream
+{"type":"headquarters","uuid":"8800a95b-12b3-454a-b527-7df0fc07501f","x":"-27","y":"4","status":"scan"}
+{"type":"engineer","uuid":"876cf8d3-01c3-4441-942c-bc9bf3926fb0","x":"-26","y":"4","status":"off"}
+end_of_stream
+```
+
+## Supervisor -> Robot
+
+### Basic structure
+
+* on a single line:
+
+```
+<success> [<information>...]
+```
+
+* or as a stream:
+
+```
+<success> begin_of_stream
+[<information split by newlines>...]
+end_of_stream
 ```
 
 ## User Interface
