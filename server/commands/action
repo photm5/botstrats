@@ -37,10 +37,12 @@ then
     read_property cost
     if source_check $*
     then
-        echo $action_type > $data_dir/robots/$from_uuid/status
-        sleep $cost
-        source $scripts_dir/actions/$action_type/script &
-        echo idle > $data_dir/robots/$from_uuid/status
+        {
+            echo $action_type > $data_dir/robots/$from_uuid/status
+            sleep $cost
+            source $scripts_dir/actions/$action_type/script
+            echo idle > $data_dir/robots/$from_uuid/status
+        } &
     fi
 else
     result 'failure no such action for your type'
