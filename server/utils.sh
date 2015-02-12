@@ -10,7 +10,7 @@ function distance ()
     d_x=$(abs $(($a_x - $b_x)))
     d_y=$(abs $(($a_y - $b_y)))
 
-    distance=$(echo "sqrt ( $d_x ^ 2 + $d_y ^ 2 )" | bc)
+    distance=$(echo "d = math.sqrt($d_x * $d_x + $d_y * $d_y) print(d - d % 1)" | lua)
     unset {a,b}_{x,y}
 }
 
