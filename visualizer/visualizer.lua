@@ -4,6 +4,10 @@ graphics = require 'graphics'
 SDL = require 'SDL'
 lfs = require 'lfs'
 
+args = { ... }
+
+queue_folder = args [ 1 ]
+
 local running = true
 graphics.eventHandlers [ SDL.event.Quit ] = function ( e )
     running = false
@@ -53,6 +57,7 @@ function splitstr ( s )
 end
 
 function handleDataLine ( line )
+    print ( line )
     split = splitstr ( line )
     if #split < 6 then return end
     uuid = split [ 1 ]
@@ -71,8 +76,8 @@ function handleDataLine ( line )
 end
 
 function checkQueue ()
-    for file in lfs.dir 'queue' do
-        file = 'queue/' .. file
+    for file in lfs.dir ( queue_folder ) do
+        file = queue_folder .. '/' .. file
         if lfs.attributes ( file, 'mode' ) == 'file' then
             f = io.open ( file )
             for line in f:lines () do
