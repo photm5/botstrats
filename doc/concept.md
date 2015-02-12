@@ -1,4 +1,4 @@
-# Robots game concept
+# botstrats concept
 
 ## Design
 
