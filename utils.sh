@@ -46,3 +46,20 @@ function send ()
     out '->' $*
     >&1 echo $*
 }
+
+function kill_recursively ()
+{
+    while read process_id
+    do
+        kill_recursively $1 $process_id
+    done < <(ps -o pid --no-headers --ppid $2)
+    kill -s $1 $2
+}
+
+function kill_childs ()
+{
+    while read process_id
+    do
+        kill_recursively $1 $process_id
+    done < <(jobs -p -r)
+}

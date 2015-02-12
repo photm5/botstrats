@@ -40,7 +40,7 @@ function main ()
     handle_line
     send $(uuidgen) spawn headquarters
     handle_line
-    while true
+    while $running
     do
         if read -t 0
         then
@@ -55,5 +55,8 @@ function main ()
         fi
     done
 }
+
+trap 'kill_childs SIGTERM; running=false' INT QUIT TERM
+running=true
 
 main
