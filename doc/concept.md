@@ -26,7 +26,7 @@
 * Translates between robot and CS
 * Is connected with CS over sockets
 
-### User Interface (UI)
+### Visualizer (VI)
 
 * Gets information from SN or directly from CS
 
@@ -34,4 +34,4 @@
 
 * Sits between CS and SV
 * Implemented using netcat, tee and named pipes
-* Filters out informations to send to the UI
+* Filters out informations to send to the VI

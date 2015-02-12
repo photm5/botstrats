@@ -77,9 +77,9 @@ end_of_stream
 end_of_stream
 ```
 
-## User Interface
+## Visualizer
 
-When the user interface receives a message of this form:
+When the visualizer receives a message of this form:
 
 ```
 <id> <path> <width> <height> <x> <y> [<ticks>]
