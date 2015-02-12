@@ -2,8 +2,13 @@
 
 robot_type=$1
 
-pos_x=$2
-pos_y=$3
+if [[ $3 ]]
+then
+    pos_x=$2
+    pos_y=$3
+else
+    radius=$2
+fi
 
 robot_uuid=$(uuidgen)
 
@@ -18,11 +23,10 @@ function gen_position ()
         factory_pos_y=$(($RANDOM % 200 - 100))
     fi
 
-    offset_x=$(($RANDOM % 10 - 5))
-    offset_y=$(($RANDOM % 10 - 5))
+    source_script scripts/random_position_inside_circle.sh $radius
 
-    pos_x=$(($factory_pos_x + $offset_x))
-    pos_y=$(($factory_pos_y + $offset_y))
+    pos_x=$(($factory_pos_x + $x))
+    pos_y=$(($factory_pos_y + $y))
 }
 
 cd $data_dir/robots

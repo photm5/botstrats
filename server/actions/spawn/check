@@ -11,9 +11,10 @@ then
     return 1
 fi
 
+read_property range
+
 if [[ $pos_x && $pos_y ]]
 then
-    read_property range
     distance $pos_x $pos_y $(cat $data_dir/robots/$from_uuid/position/{x,y})
     if [[ ! $distance -le $range ]]
     then
