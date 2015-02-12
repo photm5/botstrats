@@ -2,4 +2,4 @@
 
 robot_type=$1
 
-source_script scripts/spawn_robot.sh $robot_type
+source_script scripts/spawn_robot.sh $robot_type 10
