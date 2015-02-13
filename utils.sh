@@ -38,7 +38,13 @@ function out ()
 function receive ()
 {
     read -r line
-    out '<-' $line
+    if [[ $line ]]
+    then
+        out '<-' $line
+    else
+        sleep 0.1
+        receive
+    fi
 }
 
 function send ()
