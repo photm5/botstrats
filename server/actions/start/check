@@ -8,21 +8,13 @@ then
     return 1
 fi
 
-from_x=$(cat $data_dir/robots/$from_uuid/position/x)
-from_y=$(cat $data_dir/robots/$from_uuid/position/y)
-
-target_x=$(cat $data_dir/robots/$target_uuid/position/x)
-target_y=$(cat $data_dir/robots/$target_uuid/position/y)
-
-offset_x=$(($from_x - $target_x))
-offset_y=$(($from_y - $target_y))
-
 read_property range
+robot_distance $from_uuid $target_uuid
 
-if [[ $(abs $offset_x) -le $range && $(abs $offset_y) -le range ]]
+if [[ ! $distance -le $range ]]
 then
-    return 0
-else
     result failure 'target robot too far away'
     return 1
 fi
+
+return 0
