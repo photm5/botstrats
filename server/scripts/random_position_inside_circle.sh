@@ -4,8 +4,8 @@ radius=$1
 
 angle=$(echo "math.randomseed($RANDOM) print(math.random() * 2 * math.pi)" | lua)
 
-x=$(echo "print(math.cos($angle)*$radius)" | lua)
-y=$(echo "print(math.sin($angle)*$radius)" | lua)
+x=$(echo "math.randomseed($RANDOM) print(math.cos($angle)*math.random()*$radius)" | lua)
+y=$(echo "math.randomseed($RANDOM) print(math.sin($angle)*math.random()*$radius)" | lua)
 
 # truncate
 x=$(echo "print($x - $x % 1)" | lua)
