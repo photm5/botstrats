@@ -10,4 +10,4 @@ cd $scripts_dir
 mkfifo to_{client,server} 2>/dev/null
 
 ncat --keep-open --listen $listen_port \
-    --sh-exec "tee to_server | nc localhost $connect_port | tee to_client & $scripts_dir/sniff.sh"
+    --sh-exec "$scripts_dir/sniff.sh & tee to_server | nc localhost $connect_port | tee to_client"

@@ -1,4 +1,4 @@
-#!/bin/env lua
+#!/usr/bin/env lua
 
 cjson = require 'cjson'
 
@@ -29,6 +29,7 @@ while true do
         if content ~= 'success begin_of_stream' and content ~= 'end_of_stream' then
             robot = cjson.decode ( content )
             print ( table.concat ( { robot.uuid, '../resources/'..robot.type..':'..robot.status..'.png', size, size, robot.x * size, robot.y * -size, ticks }, ' ' ) )
+            io.stdout:flush ()
         end
     end
 end

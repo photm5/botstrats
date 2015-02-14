@@ -1,4 +1,4 @@
-#!/bin/env lua
+#!/usr/bin/env lua
 
 graphics = require 'graphics'
 SDL = require 'SDL'
