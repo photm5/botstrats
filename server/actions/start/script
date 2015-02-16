@@ -1,4 +1,0 @@
-#!/bin/bash
-
-send $uuid start $target_uuid
-result success
