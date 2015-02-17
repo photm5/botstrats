@@ -58,6 +58,8 @@ end )
 
 robots = {}
 
+math.randomseed ( socket.gettime () )
+
 timer = require 'timer' ( {
     function ()
         return pollers.clients:poll ()
