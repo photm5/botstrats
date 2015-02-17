@@ -19,7 +19,7 @@ function flush_message_queue ()
     fi
     while true
     do
-        file_name=$(ls -1 | sed q)
+        file_name=$(ls -1 | sort -n | sed q)
         if [[ $file_name != '' ]]
         then
             send $(cat $file_name)
