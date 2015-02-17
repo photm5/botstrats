@@ -1,11 +1,3 @@
-function collisions ( pos )
-    for _, robot in pairs ( robots ) do
-        if pos == robot.pos then
-            return true
-        end
-    end
-end
-
 return function ( request, result )
     return {
         type_table = {
@@ -45,7 +37,7 @@ return function ( request, result )
                     result ( 'failure', 'the new position is too far away' )
                     return false
                 end
-                if collisions ( request.pos ) then
+                if lib.collisions ( request.pos ) then
                     result ( 'failure', 'the new position is occupied' )
                     return false
                 end
@@ -56,11 +48,11 @@ return function ( request, result )
             if not request.pos then
                 for i = 1, config.random_position_tries do
                     pos = lib.random_circle_position ( self:range () ) + request.from.pos
-                    if not collisions ( pos ) then
+                    if not lib.collisions ( pos ) then
                         break
                     end
                 end
-                if collisions ( pos ) then
+                if lib.collisions ( pos ) then
                     result ( 'failure', 'failed to find a free spot' )
                     return
                 end
