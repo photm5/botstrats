@@ -48,7 +48,9 @@ end )
 
 pollers.accept.clients:subscribe ( function ( client )
     client.receive_message:subscribe ( function ( message )
-        commands [ message.type ] ( client, message )
+        if not pcall ( commands [ message.type ], client, message ) then
+            client.send_message ( { id = message.id, type = 'failed' } )
+        end
     end )
 end )
 
