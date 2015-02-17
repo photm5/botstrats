@@ -72,3 +72,9 @@ Controls in the visualizer:
 You will want to zoom out until you see the headquarters building, and then
 navigate to it. It is spawned at a random location. You cannot see the building
 until you have started the `scan` action in the lua prompt.
+
+## license
+
+This project is licensed under [MIT (Expat)][license].
+
+[license]: https://github.com/shak-mar/botstrats/blob/master/LICENSE
