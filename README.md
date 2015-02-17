@@ -23,6 +23,7 @@ on the headquarter, and start actions that way.
     * `lua-cjson`
     * `lua-sdl2`
     * `luafilesystem`
+    * `luasocket`
 * gnu bash
 * gnu coreutils
 * graphviz, if you want to view `doc/network.gv`
