@@ -1,19 +1,5 @@
 # botstrats concept
 
-## Design
-
-### Rules
-
-* Keep it simple
-* Do it the Plan 9 way
-* Don't restrict
-
-### Ideas
-
-* Use netcat instead of socket libraries
-* Use shell programming languages
-* Save world as files, even while the game is running
-
 ## network components
 
 ### Central Server (CS)
