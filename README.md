@@ -12,8 +12,8 @@ You program robots in whatever language you choose that can be used to create
 executable files. The game starts these files and they communicate with it via
 stdin and stdout. They can start actions, like `move` or `scan`, to change and
 explore the game state. The player has direct control over a special building,
-his headquarter. For example, he can open a TCP tunnel to a lua shell that runs
-on the headquarter, and start actions that way.
+his headquarter. For example, he can open a TCP tunnel to a netcat on the
+headquarter.
 
 ## requirements
 
@@ -31,7 +31,7 @@ on the headquarter, and start actions that way.
 * gnu make
 * netcat (Invoked as both `ncat` and `nc`. Whenever the `--sh-exec` option is
   needed, `ncat` is used.) (Both the gnu and the openbsd implementation work)
-* rlwrap, If you want some commandline editing in your headquarter lua prompt.
+* rlwrap, If you want some commandline editing in your headquarter prompt.
 
 This has only been tested on archlinux. If you successfully tried it on
 something else, please open an issue so I can mention it here.
@@ -46,16 +46,8 @@ You will need a lot of different terminals (or tmux windows/panes):
 * `./supervisor/supervisor.sh`
 * `rlwrap nc localhost 2005`
 
-In the lua prompt:
-```lua
-actions = io.open ( 'actions', 'a' )
-results = io.open ( 'results', 'r' )
-
-actions:write ( 'scan\n' ) actions:flush ()
-repeat
-    res = results:read ()
-    print ( res )
-until res == 'end_of_stream'
+```
+scan
 ```
 
 Controls in the visualizer:
