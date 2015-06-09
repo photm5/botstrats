@@ -36,9 +36,8 @@ action :: String -> ActionHandler
 action "scan" = \args robot -> do
     expect (args == []) "No arguments expected"
     let range = if kind robot == Headquarters then 100 else 10
-    let cost  = if kind robot == Headquarters then 0 else 10
     success "begin_of_stream"
-    mapM_ result . map jsonifyRobot . robots =<< get
+    mapM_ result . map jsonifyRobot . filter ((<= range) . distance (pos robot) . pos) . robots =<< get
     result "end_of_stream"
 
 action "query" = \args robot -> do
@@ -90,10 +89,3 @@ result msg = do
     (message, handle) <- ask
     let action:robotID:args = parts message
     liftIO . send handle $ Message (mId message) "result" [action, robotID, msg]
-
-{-
-performCost :: (MonadIO m) => Float -> m () -> m ()
-performCost cost m = if cost == 0 then m else void . liftIO . forkIO $ do
-    liftIO . threadDelay . round $ cost * 1000
-    m
-    -}
