@@ -80,4 +80,5 @@ randomPositionInCircle arg@((x,y), r) = do
     else randomPositionInCircle arg
 
 distance :: (Floating a) => Position -> Position -> a
-distance (x1,y1) (x2,y2)= sqrt $ (fromIntegral x1 - fromIntegral x2) ** 2 + (fromIntegral y1 - fromIntegral y2) ** 2
+distance (x1,y1) (x2,y2)= sqrt $ (fromIntegral x1 - fromIntegral x2) ** 2
+                               + (fromIntegral y1 - fromIntegral y2) ** 2
