@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 scripts_dir=$(cd $(dirname $0); pwd)
 data_dir=$1

@@ -16,38 +16,20 @@ his headquarter, by opening a TCP tunnel to a netcat.
 
 ## requirements
 
-* `sdl2`, `sdl2_image`, `sdl2_mixer`, `sdl2_net`, `sdl2_ttf`
-* lua
-* luarocks:
-    * `lua-cjson`
-    * `lua-sdl2`
-    * `luafilesystem`
-    * `luasocket`
-* gnu bash
-* gnu coreutils
-* graphviz, if you want to view `doc/network.gv`
-* inkscape, for rendering svg images
-* gnu make
-* netcat (Invoked as both `ncat` and `nc`. Whenever the `--sh-exec` option is
-  needed, `ncat` is used.) (Both the gnu and the openbsd implementation work)
-* rlwrap, If you want some commandline editing in your headquarter prompt.
-
-This has only been tested on archlinux. If you successfully tried it on
-something else, please open an issue so I can mention it here.
+To be updated as soon as the lua dependency is removed.
 
 ## quick try
 
-You will need a lot of different terminals (or tmux windows/panes):
+* server:
 
-* `./server/server.sh`
-* `./sniffer/sniffer.sh`
-* `./visualizer/visualizer.sh`
+    cd server
+    nix-shell
+    cabal configure
+    cabal run
+
 * `./supervisor/supervisor.sh`
-* `rlwrap nc localhost 2005`
-
-```
-scan
-```
+* `rlwrap nc localhost 2005` In here, you can run commands from the point of
+  view of your headquarter. Try `query`, `scan`, `spawn engineer`, etc.
 
 Controls in the visualizer:
 
@@ -62,7 +44,7 @@ Controls in the visualizer:
 
 You will want to zoom out until you see the headquarters building, and then
 navigate to it. It is spawned at a random location. You cannot see the building
-until you have started the `scan` action in the lua prompt.
+until you have started the `scan` action in the prompt.
 
 ## license
 
