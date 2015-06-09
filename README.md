@@ -9,11 +9,10 @@
 ## idea
 
 You program robots in whatever language you choose that can be used to create
-executable files. The game starts these files and they communicate with it via
+executable files. The game runs these files and communicates with them via
 stdin and stdout. They can start actions, like `move` or `scan`, to change and
 explore the game state. The player has direct control over a special building,
-his headquarter. For example, he can open a TCP tunnel to a netcat on the
-headquarter.
+his headquarter, by opening a TCP tunnel to a netcat.
 
 ## requirements
 
