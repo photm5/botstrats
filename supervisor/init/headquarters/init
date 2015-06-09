@@ -1,11 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-port=2005
-
-function main ()
-{
-    >&2 echo A lua shell is available on port $port
-    ncat --listen $port
-}
-
-main
+>&2 echo Opening port 2005…
+while true
+do
+    netcat -l -p 2005
+done
