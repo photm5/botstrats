@@ -1,6 +1,9 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 module Game where
 
 import Control.Concurrent (MVar, newEmptyMVar, putMVar)
+import Control.Monad.State
 import Data.Char (toLower)
 import Data.Maybe (listToMaybe)
 import Data.UUID
@@ -15,6 +18,7 @@ data Action = Access | Move | Query | Scan | Spawn | Start
     deriving (Eq, Show)
 data RobotKind = Headquarters | Engineer | Specialist | Factory
     deriving (Eq, Show)
+data Direction = North | East | South | West
 
 type Position = (Int, Int)
 type Area = (Position, Position)
@@ -45,6 +49,13 @@ stringToKind "specialist" = Just Specialist
 stringToKind "factory" = Just Factory
 stringToKind _ = Nothing
 
+stringToDirection :: String -> Maybe Direction
+stringToDirection "north" = Just North
+stringToDirection "east"  = Just East
+stringToDirection "west"  = Just West
+stringToDirection "south" = Just South
+stringToDirection _       = Nothing
+
 initialMVar :: IO (MVar GameState)
 initialMVar = do
     mvar <- newEmptyMVar
@@ -65,6 +76,20 @@ changeRobot uuid fun state = state { robots = map mapFun $ robots state }
     where mapFun robot
             | rId robot == uuid = fun robot
             | otherwise         = robot
+
+moveRobot :: Direction -> Robot -> Robot
+moveRobot dir rob = rob { pos = (x + fst (pos rob), y + snd (pos rob)) }
+    where x = case dir of
+            East -> 1
+            West -> -1
+            _ -> 0
+          y = case dir of
+            North -> 1
+            South -> -1
+            _ -> 0
+
+setStatus :: (MonadState GameState m) => UUID -> RobotState -> m ()
+setStatus robotID status = modify . changeRobot robotID $ \r -> r { status = status }
 
 randomPosition :: Area -> IO Position
 randomPosition ((x1,y1),(x2,y2))= do
