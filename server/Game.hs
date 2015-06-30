@@ -12,7 +12,7 @@ import System.Random (randomRIO)
 data GameState = GameState { robots :: [Robot], mvar :: MVar GameState }
 data Robot = Robot { rId :: UUID, pos :: Position, status :: RobotState, kind :: RobotKind }
     deriving (Eq)
-data RobotState = Stopped | Idle | Performing Action
+data RobotState = Off | Idle | Performing Action
     deriving (Eq)
 data Action = Access | Move | Query | Scan | Spawn | Start
     deriving (Eq, Show)
@@ -33,7 +33,7 @@ jsonifyRobot robot = "{" ++ field "type" (kindToString . kind) ++
                      "," ++ field "status" (jsonifyState . status) ++
                      "}"
     where field str fun = "\"" ++ str ++ "\":\"" ++ fun robot ++ "\""
-          jsonifyState Stopped = "stopped"
+          jsonifyState Off = "off"
           jsonifyState Idle = "idle"
           jsonifyState (Performing action) = firstLower $ show action
           firstLower (x:xs) = toLower x : xs

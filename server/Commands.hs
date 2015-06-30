@@ -48,7 +48,7 @@ cmd "robot_stopped" = \handle -> do
         case fromString idPart of
             Nothing -> invalid handle
             Just uuid -> modify . changeRobot uuid $
-                \r -> r { status = Stopped }
+                \r -> r { status = Off }
 
 cmd _ = invalid
 
