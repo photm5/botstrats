@@ -62,7 +62,7 @@ action "spawn" = \args robot -> do
                     catchIO (read x, read y) . const $ throwError "Bad Number"
     delay 1000 Spawn $ do
         uuid <- liftIO nextRandom
-        modify . spawnRobot $ Robot uuid position Stopped targetKind
+        modify . spawnRobot $ Robot uuid position Off targetKind
         success $ show uuid
 
 action "move" = \args robot -> do

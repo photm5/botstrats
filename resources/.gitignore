@@ -1,6 +1,1 @@
-*.png
-
-# symlinks
-!factory:start.png
-!headquarters:start.png
-!specialist:start.png
+*.bmp
