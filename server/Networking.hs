@@ -3,20 +3,17 @@ module Networking
 )
 where
 
-import Control.Applicative
-import Control.Concurrent
+import Control.Concurrent (forkIO)
+import Control.Monad (forever)
 import Network
-import System.IO
+import System.IO (Handle)
 
 type Handler = Handle -> HostName -> PortNumber -> IO ()
 
 listenLoop :: PortID -> Handler -> IO ()
-listenLoop port handler = do
-    socket <- listenOn port
-    acceptLoop socket handler
+listenLoop port handler = listenOn port >>= acceptLoop handler
 
-acceptLoop :: Socket -> Handler -> IO ()
-acceptLoop socket handler = do
+acceptLoop :: Handler -> Socket -> IO ()
+acceptLoop handler socket = forever $ do
     (handle, hostname, portnumber) <- accept socket
     forkIO $ handler handle hostname portnumber
-    acceptLoop socket handler
