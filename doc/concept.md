@@ -19,5 +19,4 @@
 ### Sniffer (SN)
 
 * Sits between CS and SV
-* Implemented using netcat, tee and named pipes
 * Filters out informations to send to the VI
