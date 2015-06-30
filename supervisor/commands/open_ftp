@@ -1,5 +1,0 @@
-#!/bin/bash
-
-robot_uuid=$1
-
-out 'Not yet implemented: start ftp server'

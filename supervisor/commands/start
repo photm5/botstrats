@@ -1,5 +1,0 @@
-#!/bin/bash
-
-robot_uuid=$1
-
-start_robot $robot_uuid
