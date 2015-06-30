@@ -8,39 +8,39 @@
 
 ## idea
 
-You program robots in whatever language you choose that can be used to create
-executable files. The game runs these files and communicates with them via
-stdin and stdout. They can start actions, like `move` or `scan`, to change and
-explore the game state. The player has direct control over a special building,
-his headquarter, by opening a TCP tunnel to a netcat.
+Unlike traditional strategy games, you do not control your units directly, but
+instead write programs that control them using whatever programming language you
+choose. They can start actions, like `move` or `scan`, to change and explore the
+game state. The player only has direct control over one special unit – his
+headquarter.
 
 ## requirements
 
-To be updated as soon as the lua dependency is removed.
+All the requirements should be recorded in the `shell.nix` files.
+
+**NOTE**: The supervisor is not rewritten in haskell yet and is thus not
+guaranteed to work on your machine.
 
 ## quick try
 
-* server:
+Run each line in it’s own shell, and wait until the previos ones have settled:
 
-    cd server
-    nix-shell
-    cabal configure
-    cabal run
+```
+cd server && nix-shell --run 'cabal run'
+cd visualizer && nix-shell --run 'cabal run'
+cd sniffer && nix-shell --run 'cabal run'
+./supervisor/supervisor.sh
+nix-shell -p rlwrap --run 'rlwrap nc localhost 2005'
+```
 
-* `./supervisor/supervisor.sh`
-* `rlwrap nc localhost 2005` In here, you can run commands from the point of
-  view of your headquarter. Try `query`, `scan`, `spawn engineer`, etc.
+In the last shell, you can then run commands from the POV of your headquarter.
+Try `query`, `scan`, `spawn engineer`.
 
-Controls in the visualizer:
+You can use the mouse to control the visualizer:
 
-| Key | Effect        |
-| --- | ------------- |
-| W   | Scroll up     |
-| A   | Scroll left   |
-| S   | Scroll down   |
-| D   | Scroll right  |
-| I   | Zoom in       |
-| O   | Zoom out      |
+* Zoom by utilizing the scroll wheel
+* Move the view port by left-clicking and dragging
+* Rotate the view port by right-clicking and dragging
 
 You will want to zoom out until you see the headquarters building, and then
 navigate to it. It is spawned at a random location. You cannot see the building
