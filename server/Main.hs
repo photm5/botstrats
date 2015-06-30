@@ -1,5 +1,8 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Main where
 
+import qualified Data.ByteString.Char8 as B
 import Data.List (intersperse)
 import Data.UUID
 import Data.UUID.V4 (nextRandom)
@@ -17,7 +20,7 @@ main = do
     var <- initialMVar
     listenLoop (PortNumber 2001) $ \handle host port -> do
         clientId <- nextRandom
-        (newMessage "welcome" [show clientId]) >>= send handle
+        (newMessage "welcome" [B.pack $ show clientId]) >>= send handle
         forever $ do
             msg <- recv handle
             case msg of

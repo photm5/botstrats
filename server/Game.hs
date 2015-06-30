@@ -1,16 +1,18 @@
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 module Game where
 
+import Data.Monoid ((<>))
 import Control.Concurrent (MVar, newEmptyMVar, putMVar)
 import Control.Monad.State
+import qualified Data.ByteString.Char8 as B
 import Data.Char (toLower)
 import Data.Maybe (listToMaybe)
-import Data.UUID
 import System.Random (randomRIO)
 
 data GameState = GameState { robots :: [Robot], mvar :: MVar GameState }
-data Robot = Robot { rId :: UUID, pos :: Position, status :: RobotState, kind :: RobotKind }
+data Robot = Robot { rId :: ID, pos :: Position, status :: RobotState, kind :: RobotKind }
     deriving (Eq)
 data RobotState = Off | Idle | Performing Action
     deriving (Eq)
@@ -23,33 +25,35 @@ data Direction = North | East | South | West
 type Position = (Int, Int)
 type Area = (Position, Position)
 type Circle = (Position, Int)
+type ID = B.ByteString
 
 -- poor man’s json formatter (for fun!)
-jsonifyRobot :: Robot -> String
-jsonifyRobot robot = "{" ++ field "type" (kindToString . kind) ++
-                     "," ++ field "uuid" (show . rId) ++
-                     "," ++ field "x" (show . fst . pos) ++
-                     "," ++ field "y" (show . snd . pos) ++
-                     "," ++ field "status" (jsonifyState . status) ++
+jsonifyRobot :: Robot -> B.ByteString
+jsonifyRobot robot = "{" <> field "type" (kindToString . kind) <>
+                     "," <> field "uuid" rId <>
+                     "," <> field "x" (B.pack . show . fst . pos) <>
+                     "," <> field "y" (B.pack . show . snd . pos) <>
+                     "," <> field "status" (jsonifyState . status) <>
                      "}"
-    where field str fun = "\"" ++ str ++ "\":\"" ++ fun robot ++ "\""
+    where field str fun = "\"" <> str <> "\":\"" <> fun robot <> "\""
           jsonifyState Off = "off"
           jsonifyState Idle = "idle"
-          jsonifyState (Performing action) = firstLower $ show action
-          firstLower (x:xs) = toLower x : xs
+          jsonifyState (Performing action) = firstLower . B.pack $ show action
 
-kindToString :: RobotKind -> String
-kindToString = firstLower . show
-    where firstLower (c:cs) = toLower c : cs
+kindToString :: RobotKind -> B.ByteString
+kindToString = firstLower . B.pack . show
 
-stringToKind :: String -> Maybe RobotKind
+firstLower :: B.ByteString -> B.ByteString
+firstLower str = (B.singleton . toLower $ B.head str) <> B.tail str
+
+stringToKind :: B.ByteString -> Maybe RobotKind
 stringToKind "engineer" = Just Engineer
 stringToKind "headquarters" = Just Headquarters
 stringToKind "specialist" = Just Specialist
 stringToKind "factory" = Just Factory
 stringToKind _ = Nothing
 
-stringToDirection :: String -> Maybe Direction
+stringToDirection :: B.ByteString -> Maybe Direction
 stringToDirection "north" = Just North
 stringToDirection "east"  = Just East
 stringToDirection "west"  = Just West
@@ -65,13 +69,13 @@ initialMVar = do
 collision :: Position -> GameState -> Maybe Robot
 collision position state = listToMaybe . filter ((== position) . pos) $ robots state
 
-lookupRobot :: UUID -> GameState -> Maybe Robot
+lookupRobot :: ID -> GameState -> Maybe Robot
 lookupRobot ident state = listToMaybe . filter ((== ident) . rId) $ robots state
 
 spawnRobot :: Robot -> GameState -> GameState
 spawnRobot robot state = state { robots = robot : robots state }
 
-changeRobot :: UUID -> (Robot -> Robot) -> GameState -> GameState
+changeRobot :: ID -> (Robot -> Robot) -> GameState -> GameState
 changeRobot uuid fun state = state { robots = map mapFun $ robots state }
     where mapFun robot
             | rId robot == uuid = fun robot
@@ -88,7 +92,7 @@ moveRobot dir rob = rob { pos = (x + fst (pos rob), y + snd (pos rob)) }
             South -> -1
             _ -> 0
 
-setStatus :: (MonadState GameState m) => UUID -> RobotState -> m ()
+setStatus :: (MonadState GameState m) => ID -> RobotState -> m ()
 setStatus robotID status = modify . changeRobot robotID $ \r -> r { status = status }
 
 randomPosition :: Area -> IO Position

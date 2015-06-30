@@ -1,10 +1,14 @@
 {-# LANGUAGE TupleSections #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 module Actions where
 
+import qualified Data.ByteString.Char8 as B
 import Data.Maybe (isJust, fromJust)
-import Data.UUID
+import Data.Monoid ((<>))
+import Data.UUID ()
 import Data.UUID.V4 (nextRandom)
+import Control.Applicative ((<$>))
 import Control.Concurrent
 import Control.Monad.Except
 import Control.Monad.State
@@ -15,13 +19,13 @@ import System.IO.Error
 import Game
 import Messages
 
-type ActionM = ReaderT (Message, Handle) (ExceptT String (StateT GameState IO))
-type ActionHandler = [String] -> Robot -> ActionM ()
+type ActionM = ReaderT (Message, Handle) (ExceptT B.ByteString (StateT GameState IO))
+type ActionHandler = [B.ByteString] -> Robot -> ActionM ()
 
 runAction :: Handle -> Message -> GameState -> IO GameState
 runAction handle message state = do
     let actionID:robotID:args = parts message
-    let robot = lookupRobot (read robotID) state
+    let robot = lookupRobot robotID state
     let noRequesterError = return (Left "Requester does not exist", state)
     (res, state') <- maybe noRequesterError
         (runTransformers state (message, handle) . action actionID args) robot
@@ -33,7 +37,7 @@ runAction handle message state = do
     where runTransformers state tuple =
             flip runStateT state . runExceptT . flip runReaderT tuple
 
-action :: String -> ActionHandler
+action :: B.ByteString -> ActionHandler
 
 action "scan" = \args robot -> do
     expect (args == []) "No arguments expected"
@@ -59,11 +63,11 @@ action "spawn" = \args robot -> do
     position <- case args of
                 [_] -> liftIO $ randomPositionInCircle (pos robot, 5)
                 [_, x, y] ->
-                    catchIO (read x, read y) . const $ throwError "Bad Number"
+                    catchIO (read $ B.unpack x, read $ B.unpack y) . const $ throwError "Bad Number"
     delay 1000 Spawn $ do
-        uuid <- liftIO nextRandom
+        uuid <- (B.pack . show) <$> liftIO nextRandom
         modify . spawnRobot $ Robot uuid position Off targetKind
-        success $ show uuid
+        success uuid
 
 action "move" = \args robot -> do
     expect (length args == 1) "Expected one argument"
@@ -75,15 +79,13 @@ action "move" = \args robot -> do
 
 action "start" = \args robot -> do
     expect (length args == 1) "Expected one argument"
-    case fromString $ head args of
-        Nothing -> throwError "Invalid uuid"
-        Just targetID -> do
-            target <- gets $ lookupRobot targetID
-            expect (isJust target) "No such target"
-            delay 1000 Start $ do
-                setStatus targetID Idle
-                success ""
-                -- TODO: send start command to supervisor
+    let targetID = head args
+    target <- gets $ lookupRobot targetID
+    expect (isJust target) "No such target"
+    delay 1000 Start $ do
+        setStatus targetID Idle
+        success ""
+        -- TODO: send start command to supervisor
 
 action _ = \_ _ -> throwError "No such action"
 
@@ -95,11 +97,11 @@ expect bool err
 catchIO :: (MonadError e m, MonadIO m) => a -> (IOError -> m a) -> m a
 catchIO x fun = (liftIO . tryIOError $ return x) >>= either fun return
 
-success :: String -> ActionM ()
+success :: B.ByteString -> ActionM ()
 success "" = result "success"
-success msg = result $ "success " ++ msg
+success msg = result $ "success " <> msg
 
-result :: String -> ActionM ()
+result :: B.ByteString -> ActionM ()
 result msg = do
     (message, handle) <- ask
     let action:robotID:args = parts message
@@ -109,14 +111,14 @@ delay :: Int -> Action -> ActionM () -> ActionM ()
 delay cost action runAction = do
     (message, handle) <- ask
     let actionID:robotID:args = parts message
-    setStatus (read robotID) $ Performing action
+    setStatus robotID $ Performing action
     stateVar <- mvar <$> get
     void . liftIO . forkIO $ do
         threadDelay $ cost * 1000
         modifyMVar_ stateVar $ \state -> do
             (res, state') <- flip runStateT state . runExceptT . flip runReaderT (message, handle) $ do 
                 runAction
-                setStatus (read robotID) Idle
+                setStatus robotID Idle
             case res of
                 Left err -> do
                     send handle $ Message (mId message) "result" [actionID, robotID, "failure", err]

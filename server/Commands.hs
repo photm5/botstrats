@@ -1,13 +1,16 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Commands
 ( respond
 )
 where
 
+import qualified Data.ByteString.Char8 as B
 import Data.Maybe (listToMaybe)
 import Data.UUID (fromString)
 import Data.UUID.V4 (nextRandom)
 import System.IO (Handle)
-import Control.Applicative
+import Control.Applicative ((<$>))
 import Control.Monad.IO.Class
 import Control.Monad.State
 import Control.Monad.Except
@@ -20,17 +23,17 @@ import Actions
 respond :: Message -> Handle -> GameState -> IO GameState
 respond message handle state = snd <$> runStateT (runReaderT (cmd (command message) handle) message) state
 
-cmd :: String -> Handle -> ReaderT Message (StateT GameState IO) ()
+cmd :: B.ByteString -> Handle -> ReaderT Message (StateT GameState IO) ()
 
 cmd "spawn" = \handle -> do
     pos <- liftIO $ randomPosition ((0,0), (100,100))
-    uuid <- liftIO $ nextRandom
+    uuid <- (B.pack . show) <$> (liftIO $ nextRandom)
     message <- ask
     let kind = (listToMaybe $ parts message) >>= stringToKind
     case kind of
         Nothing -> invalid handle
         Just k -> do
-            liftIO . send handle $ message { parts = [head $ parts message, show uuid] }
+            liftIO . send handle $ message { parts = [head $ parts message, uuid] }
             modify $ spawnRobot (Robot uuid pos Idle k)
 
 cmd "action" = \handle -> do
@@ -45,14 +48,11 @@ cmd "robot_stopped" = \handle -> do
     then invalid handle
     else do
         let idPart = head $ parts message
-        case fromString idPart of
-            Nothing -> invalid handle
-            Just uuid -> modify . changeRobot uuid $
-                \r -> r { status = Off }
+        modify . changeRobot idPart $ \r -> r { status = Off }
 
 cmd _ = invalid
 
-complain :: String -> Handle -> ReaderT Message (StateT GameState IO) ()
+complain :: B.ByteString -> Handle -> ReaderT Message (StateT GameState IO) ()
 complain err handle = undefined
 
 invalid :: Handle -> ReaderT Message (StateT GameState IO) ()
