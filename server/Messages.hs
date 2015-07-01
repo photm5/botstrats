@@ -8,8 +8,6 @@ import Data.Monoid ((<>))
 import Data.UUID (UUID, fromString)
 import Data.UUID.V4 (nextRandom)
 import System.IO (Handle, hPutStrLn, hGetLine)
-import Text.Parsec
-import Text.Parsec.String
 
 data Message = Message { mId :: B.ByteString
                , command :: B.ByteString
