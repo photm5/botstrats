@@ -25,17 +25,6 @@ respond message handle state = snd <$> runStateT (runReaderT (cmd (command messa
 
 cmd :: B.ByteString -> Handle -> ReaderT Message (StateT GameState IO) ()
 
-cmd "spawn" = \handle -> do
-    pos <- liftIO $ randomPosition ((0,0), (100,100))
-    uuid <- (B.pack . show) <$> (liftIO $ nextRandom)
-    message <- ask
-    let kind = (listToMaybe $ parts message) >>= stringToKind
-    case kind of
-        Nothing -> invalid handle
-        Just k -> do
-            liftIO . send handle $ message { parts = [head $ parts message, uuid] }
-            modify $ spawnRobot (Robot uuid pos Idle k)
-
 cmd "action" = \handle -> do
     message <- ask
     if length (parts message) < 2
