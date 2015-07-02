@@ -78,9 +78,8 @@ main = do
         swapMVar time curTime
         frameFun images curTime
 
-
 override :: Image -> [Image] -> [Image]
 override x xs
-    | any eq xs = map (const x) . filter eq $ xs
+    | any eq xs = (map (const x) . filter eq $ xs) ++ filter (not . eq) xs
     | otherwise = x : xs
     where eq i = identifier x == identifier i
