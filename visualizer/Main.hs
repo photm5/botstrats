@@ -27,7 +27,7 @@ data Message = Message { mIdentifier :: String
                        , mLifeTime :: Maybe TimeSpan
                        }
 
-displayMode = InWindow "botstrats visualizer" (800, 600) (0, 0)
+displayMode = InWindow "botstrats visualizer" (1000, 1000) (0, 0)
 resourcePath = "../resources/"
 imageSize = 500
 
