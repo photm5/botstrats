@@ -23,7 +23,7 @@ type ActionHandler = [B.ByteString] -> Robot -> ActionM ()
 
 runAction :: Handle -> Message -> GameState -> IO GameState
 runAction handle message state = do
-    let actionID:robotID:args = parts message
+    let actionID:robotID:args = mParts message
     let robot = lookupRobot robotID state
     let noRequesterError = return (Left "Requester does not exist", state)
     (res, state') <- maybe noRequesterError
@@ -111,13 +111,13 @@ success msg = result $ "success " <> msg
 result :: B.ByteString -> ActionM ()
 result msg = do
     (message, handle) <- ask
-    let action:robotID:args = parts message
+    let action:robotID:args = mParts message
     liftIO . send handle $ Message (mId message) "result" [action, robotID, msg]
 
 delay :: Int -> Action -> ActionM () -> ActionM ()
 delay cost action runAction = do
     (message, handle) <- ask
-    let actionID:robotID:args = parts message
+    let actionID:robotID:args = mParts message
     setStatus robotID $ Performing action
     stateVar <- mvar <$> get
     void . liftIO . forkIO $ do
