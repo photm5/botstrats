@@ -27,6 +27,7 @@ Run each line in it’s own shell, and wait until the previos ones have settled:
 
 ```bash
 cd server && nix-shell --run 'cabal run'
+cd resources && nix-shell --run 'make'
 cd visualizer && nix-shell --run 'cabal run'
 cd sniffer && nix-shell --run 'cabal run'
 cd supervisor && nix-shell --run 'cabal run'
