@@ -25,7 +25,7 @@ you need as soon as you open up a `nix-shell` environment.
 
 Run each line in it’s own shell, and wait until the previos ones have settled:
 
-```
+```bash
 cd server && nix-shell --run 'cabal run'
 cd visualizer && nix-shell --run 'cabal run'
 cd sniffer && nix-shell --run 'cabal run'
