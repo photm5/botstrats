@@ -17,7 +17,7 @@ main = do
     mutables <- initialMutables =<< connectTo "localhost" (PortNumber 2003)
     buffer <- newMVar B.empty
     forever $ do
-        maybeMessage <- withMVar (server mutables) $ recv buffer
+        maybeMessage <- withMVar (server mutables) $ recv' buffer
         case maybeMessage of
             Nothing -> return () -- ignore
             Just message -> do

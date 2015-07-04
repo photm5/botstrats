@@ -27,16 +27,16 @@ cmd :: B.ByteString -> Handle -> ReaderT Message (StateT GameState IO) ()
 
 cmd "action" = \handle -> do
     message <- ask
-    if length (parts message) < 2
+    if length (mParts message) < 2
     then invalid handle
     else get >>= liftIO . runAction handle message >>= put
 
 cmd "robot_stopped" = \handle -> do
     message <- ask
-    if length (parts message) /= 1
+    if length (mParts message) /= 1
     then invalid handle
     else do
-        let idPart = head $ parts message
+        let idPart = head $ mParts message
         modify . changeRobot idPart $ \r -> r { status = Off }
 
 cmd _ = invalid

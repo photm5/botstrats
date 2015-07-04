@@ -60,19 +60,3 @@ tryIndex :: [a] -> Int -> Maybe a
 tryIndex xs i
     | i < length xs = Just $ xs !! i
     | otherwise      = Nothing
-
-hGetLineNonBlocking :: Handle -> IO (Maybe B.ByteString)
-hGetLineNonBlocking handle = do
-    readString <- hGetLineNonBlocking' handle B.empty
-    if readString /= B.empty && B.last readString == '\n' then
-        return $ Just readString
-    else return Nothing
-
-hGetLineNonBlocking' :: Handle -> B.ByteString -> IO B.ByteString
-hGetLineNonBlocking' handle buffer = do
-    chunk <- B.hGetNonBlocking handle 1
-    if chunk == B.empty then
-        return buffer
-    else if chunk == "\n" then
-        return buffer
-    else return $ buffer <> chunk

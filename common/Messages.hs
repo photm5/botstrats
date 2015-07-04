@@ -40,8 +40,14 @@ newMessage command parts = do
     uuid <- nextRandom
     return $ Message (B.pack $ show uuid) command parts
 
-recv :: MVar B.ByteString -> Handle -> IO (Maybe Message)
-recv buffer handle = do
+recv :: Handle -> IO (Maybe Message)
+recv handle = do
+    line <- B.hGetLine handle
+    B.putStrLn $ "<- " <> line
+    return $ parseMessage line
+
+recv' :: MVar B.ByteString -> Handle -> IO (Maybe Message)
+recv' buffer handle = do
     maybeLine <- hGetLineNonBlocking buffer handle
     case maybeLine of
         Nothing -> return Nothing
