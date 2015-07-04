@@ -6,7 +6,7 @@
 
 [screenshot]: http://i.imgur.com/oyEWW4m.png
 
-## idea
+## Idea
 
 Unlike traditional strategy games, you do not control your units directly, but
 instead write programs that control them using whatever programming language you
@@ -14,14 +14,14 @@ choose. They can start actions, like `move` or `scan`, to change and explore the
 game state. The player only has direct control over one special unit – his
 headquarter.
 
-## requirements
+## Requirements
 
 You’ll want to use the [Nix package manager][nix], which will install everything
 you need as soon as you open up a `nix-shell` environment.
 
 [nix]: http://nixos.org/nix/
 
-## quick try
+## Quick try
 
 Run each line in it’s own shell, and wait until the previos ones have settled:
 
@@ -46,7 +46,7 @@ You will want to zoom out until you see the headquarters building, and then
 navigate to it. It is spawned at a random location. You cannot see the building
 until you have started the `scan` action in the prompt.
 
-## license
+## License
 
 This project is licensed under [MIT (Expat)][license].
 
