@@ -26,11 +26,11 @@ you need as soon as you open up a `nix-shell` environment.
 Run each line in it’s own shell, and wait until the previos ones have settled:
 
 ```bash
-cd server && nix-shell --run 'cabal run'
+nix-shell --run 'cabal run botstrats-server'
 cd resources && nix-shell --run 'make'
-cd visualizer && nix-shell --run 'cabal run'
-cd sniffer && nix-shell --run 'cabal run'
-cd supervisor && nix-shell --run 'cabal run'
+nix-shell --run 'cabal run botstrats-visualizer'
+nix-shell --run 'cabal run botstrats-sniffer'
+nix-shell --run 'cabal run botstrats-supervisor'
 nix-shell -p rlwrap --run 'rlwrap nc localhost 2005'
 ```
 
