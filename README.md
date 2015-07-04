@@ -2,9 +2,9 @@
 
 #### A strategy game that makes you program robots
 
-![screenshot][1]
+![screenshot][screenshot]
 
-[1]: http://i.imgur.com/oyEWW4m.png
+[screenshot]: http://i.imgur.com/oyEWW4m.png
 
 ## idea
 
@@ -16,7 +16,10 @@ headquarter.
 
 ## requirements
 
-All the requirements should be recorded in the `shell.nix` files.
+You’ll want to use the [Nix package manager][nix], which will install everything
+you need as soon as you open up a `nix-shell` environment.
+
+[nix]: http://nixos.org/nix/
 
 ## quick try
 
