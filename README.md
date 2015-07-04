@@ -18,9 +18,6 @@ headquarter.
 
 All the requirements should be recorded in the `shell.nix` files.
 
-**NOTE**: The supervisor is not rewritten in haskell yet and is thus not
-guaranteed to work on your machine.
-
 ## quick try
 
 Run each line in it’s own shell, and wait until the previos ones have settled:
@@ -29,7 +26,7 @@ Run each line in it’s own shell, and wait until the previos ones have settled:
 cd server && nix-shell --run 'cabal run'
 cd visualizer && nix-shell --run 'cabal run'
 cd sniffer && nix-shell --run 'cabal run'
-./supervisor/supervisor.sh
+cd supervisor && nix-shell --run 'cabal run'
 nix-shell -p rlwrap --run 'rlwrap nc localhost 2005'
 ```
 
