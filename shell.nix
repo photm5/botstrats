@@ -4,21 +4,22 @@ let
 
   inherit (nixpkgs) pkgs;
 
-  f = { cabal-install, mkDerivation, base, bytestring, directory, filepath, lens
-      , mtl, network, process, stdenv, transformers, unix, uuid
+  f = { cabal-install, mkDerivation, aeson, base, bytestring, directory, filepath
+      , gloss, lens, mtl, network, process, random, stdenv, transformers
+      , uuid
       }:
       mkDerivation {
-        pname = "botstrats-supervisor";
+        pname = "botstrats";
         version = "0.1.0.0";
         src = ./.;
         isLibrary = false;
         isExecutable = true;
         buildDepends = [ cabal-install
-          base bytestring directory filepath lens mtl network process
-          transformers unix uuid
+          aeson base bytestring directory filepath gloss lens mtl network
+          process random transformers uuid
         ];
         homepage = "https://github.com/shak-mar/botstrats";
-        description = "Supervisor for botstrats";
+        description = "A strategy game that makes you program robots";
         license = stdenv.lib.licenses.mit;
       };
 
