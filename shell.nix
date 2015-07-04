@@ -4,8 +4,8 @@ let
 
   inherit (nixpkgs) pkgs;
 
-  f = { cabal-install, mkDerivation, base, bytestring, directory, filepath, lens
-      , mtl, network, process, random, stdenv, transformers, uuid
+  f = { cabal-install, mkDerivation, base, bytestring, directory, filepath, gloss
+      , lens, mtl, network, process, random, stdenv, transformers, uuid
       }:
       mkDerivation {
         pname = "botstrats";
@@ -14,8 +14,8 @@ let
         isLibrary = false;
         isExecutable = true;
         buildDepends = [ cabal-install
-          base bytestring directory filepath lens mtl network process random
-          transformers uuid
+          base bytestring directory filepath gloss lens mtl network process
+          random transformers uuid
         ];
         homepage = "https://github.com/shak-mar/botstrats";
         description = "A strategy game that makes you program robots";
