@@ -6,18 +6,17 @@ module Actions where
 import qualified Data.ByteString.Char8 as B
 import Data.Maybe (isJust, fromJust)
 import Data.Monoid ((<>))
-import Data.UUID ()
-import Data.UUID.V4 (nextRandom)
 import Control.Applicative ((<$>))
 import Control.Concurrent
 import Control.Monad.Except
 import Control.Monad.State
 import Control.Monad.Reader
-import System.IO (Handle(), hPutStrLn)
+import System.IO (Handle())
 import System.IO.Error
 
 import Game
 import Messages
+import UUID
 
 type ActionM = ReaderT (Message, Handle) (ExceptT B.ByteString (StateT GameState IO))
 type ActionHandler = [B.ByteString] -> Robot -> ActionM ()
@@ -65,17 +64,24 @@ action "spawn" = \args robot -> do
                 [_, x, y] ->
                     catchIO (read $ B.unpack x, read $ B.unpack y) . const $ throwError "Bad Number"
     delay 1000 Spawn $ do
-        uuid <- (B.pack . show) <$> liftIO nextRandom
+        uuid <- liftIO $ randomUUID
         modify . spawnRobot $ Robot uuid position Off targetKind
+        (_, handle) <- ask
+        liftIO $ newMessage "spawn" [(kindToString targetKind), uuid]
+            >>= send handle
         success uuid
 
 action "move" = \args robot -> do
     expect (length args == 1) "Expected one argument"
     case stringToDirection $ head args of
         Nothing -> throwError "Invalid direction"
-        Just direction -> delay 1000 Move $ do
-            modify . changeRobot (rId robot) $ moveRobot direction
-            success ""
+        Just direction -> do
+            st <- get
+            case collision (move direction $ pos robot) st of
+                Nothing -> delay 1000 Move $ do
+                    modify . changeRobot (rId robot) $ moveRobot direction
+                    success ""
+                Just _ -> throwError "Target position occupied"
 
 action "start" = \args robot -> do
     expect (length args == 1) "Expected one argument"
@@ -84,8 +90,9 @@ action "start" = \args robot -> do
     expect (isJust target) "No such target"
     delay 1000 Start $ do
         setStatus targetID Idle
+        (_, handle) <- ask
+        liftIO $ newMessage "start" [targetID] >>= send handle
         success ""
-        -- TODO: send start command to supervisor
 
 action _ = \_ _ -> throwError "No such action"
 

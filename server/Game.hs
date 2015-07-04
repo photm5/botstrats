@@ -81,16 +81,19 @@ changeRobot uuid fun state = state { robots = map mapFun $ robots state }
             | rId robot == uuid = fun robot
             | otherwise         = robot
 
-moveRobot :: Direction -> Robot -> Robot
-moveRobot dir rob = rob { pos = (x + fst (pos rob), y + snd (pos rob)) }
-    where x = case dir of
+move :: Direction -> Position -> Position
+move dir (x, y) = (x + dx, y + dy)
+    where dx = case dir of
             East -> 1
             West -> -1
             _ -> 0
-          y = case dir of
+          dy = case dir of
             North -> 1
             South -> -1
             _ -> 0
+
+moveRobot :: Direction -> Robot -> Robot
+moveRobot dir rob = rob { pos = move dir $ pos rob }
 
 setStatus :: (MonadState GameState m) => ID -> RobotState -> m ()
 setStatus robotID status = modify . changeRobot robotID $ \r -> r { status = status }
