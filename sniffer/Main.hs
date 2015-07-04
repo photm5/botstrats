@@ -35,8 +35,7 @@ main = do
     (supervisor, _, _ ) <- accept listenSock
     server <- connectTo "localhost" (PortNumber 2001)
     visualizer <- connectTo "localhost" (PortNumber 2000)
-    forkIO . forLines supervisor $ \line -> do
-        B.hPutStrLn server line
+    forkIO . forLines supervisor $ B.hPutStrLn server
     forLines server $ \line -> do
         let msg = B.words line
         B.hPutStrLn supervisor line
