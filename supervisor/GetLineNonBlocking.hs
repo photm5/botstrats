@@ -5,6 +5,7 @@ module GetLineNonBlocking where
 import Control.Applicative ((<$>))
 import Control.Arrow (second)
 import Control.Concurrent.MVar (MVar, modifyMVar_, readMVar)
+import Control.Monad (unless)
 import qualified Data.ByteString.Char8 as B
 import Data.Maybe (listToMaybe)
 import Data.Monoid ((<>))
@@ -18,7 +19,7 @@ hGetLineNonBlocking buffer handle = do
         modifyMVar_ buffer . const $ return B.empty
         return . Just $ buf <> read
     else do
-        modifyMVar_ buffer $ return . (<> read)
+        unless (read == B.empty) . modifyMVar_ buffer $ return . (<> read)
         return Nothing
 
 hGetLineNonBlocking' :: Handle -> IO (Bool, B.ByteString)
