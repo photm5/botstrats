@@ -4,8 +4,8 @@ let
 
   inherit (nixpkgs) pkgs;
 
-  f = { cabal-install, mkDerivation, base, bytestring, directory, filepath, mtl
-      , network, process, stdenv, transformers, unix, uuid
+  f = { cabal-install, mkDerivation, base, bytestring, directory, filepath, lens
+      , mtl, network, process, stdenv, transformers, unix, uuid
       }:
       mkDerivation {
         pname = "botstrats-supervisor";
@@ -14,8 +14,8 @@ let
         isLibrary = false;
         isExecutable = true;
         buildDepends = [ cabal-install
-          base bytestring directory filepath mtl network process transformers
-          unix uuid
+          base bytestring directory filepath lens mtl network process
+          transformers unix uuid
         ];
         homepage = "https://github.com/shak-mar/botstrats";
         description = "Supervisor for botstrats";

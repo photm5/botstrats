@@ -13,12 +13,12 @@ import System.IO (Handle, hPutStrLn, hGetLine)
 
 data Message = Message { mId :: B.ByteString
                , command :: B.ByteString
-               , parts :: [B.ByteString]
+               , mParts :: [B.ByteString]
                }
 
 instance Show Message where
     show message = B.unpack . B.concat . intersperse " " $
-        (mId message) : command message : parts message 
+        (mId message) : command message : mParts message
 
 parseMessage :: B.ByteString -> Maybe Message
 parseMessage = parseMessage' . B.words
