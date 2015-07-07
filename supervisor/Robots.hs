@@ -61,7 +61,7 @@ createRobot :: B.ByteString -> B.ByteString -> IO Robot
 createRobot kind identifier = do
     -- The `True` means parents will be created as well
     createDirectoryIfMissing True (genDrivePath identifier)
-    initDir <- (<> "/init/" <> B.unpack kind) <$> getCurrentDirectory
+    initDir <- (<> "/supervisor/init/" <> B.unpack kind) <$> getCurrentDirectory
     exists <- doesDirectoryExist initDir
     when exists $ copyRecursive initDir (genDrivePath identifier)
     return $ Off identifier
