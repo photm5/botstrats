@@ -11,6 +11,7 @@ module Robots
 , rProcess
 , startRobot
 , createRobot
+, killRobot
 , isRunning
 , findRunningRobot
 , findOffRobot
@@ -54,8 +55,8 @@ startRobot (Off identifier) = (packInRobot <$> createProcess process)
               CreatePipe       -- Create a pipe for stdout
               Inherit          -- Inherit stderr
               False            -- Don’t close any file descriptors
-              False            -- Don’t create a new process group
-              True             -- Delegate Control-C handling
+              True             -- Create a new process group
+              False            -- Don’t delegate Control-C handling
 
 createRobot :: B.ByteString -> B.ByteString -> IO Robot
 createRobot kind identifier = do
@@ -65,6 +66,11 @@ createRobot kind identifier = do
     exists <- doesDirectoryExist initDir
     when exists $ copyRecursive initDir (genDrivePath identifier)
     return $ Off identifier
+
+killRobot :: Robot -> IO Robot
+killRobot (Running ident stdIn stdOut procHandle) = do
+    interruptProcessGroupOf procHandle
+    return $ Off ident
 
 copyRecursive :: FilePath -> FilePath -> IO ()
 copyRecursive from to = do
