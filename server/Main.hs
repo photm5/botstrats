@@ -21,11 +21,9 @@ main = do
         clientId <- randomUUID
         newMessage "welcome" [clientId] >>= send handle
         modifyMVar_ var $ initHeadquarters handle
-        forever $ do
-            msg <- recv handle
-            case msg of
-                Nothing -> newMessage "invalid" [] >>= send handle
-                Just message -> modifyMVar_ var $ respond message handle
+        forMessages (return handle) $ \m -> case m of
+            Nothing -> newMessage "invalid" [] >>= send handle
+            Just message -> modifyMVar_ var $ respond message handle
 
 initHeadquarters :: Handle -> GameState -> IO GameState
 initHeadquarters handle state = do

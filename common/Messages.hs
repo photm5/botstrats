@@ -1,8 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RankNTypes #-}
 
 module Messages where
 
-import Control.Concurrent.MVar (MVar)
+import Control.Concurrent.MVar (MVar, newMVar)
+import Control.Monad (forever)
 import qualified Data.ByteString.Char8 as B
 import Data.List (intersperse)
 import Data.Monoid ((<>))
@@ -46,11 +48,23 @@ recv handle = do
     B.putStrLn $ "<- " <> line
     return $ parseMessage line
 
-recv' :: MVar B.ByteString -> Handle -> IO (Maybe Message)
+recv' :: MVar B.ByteString -> Handle -> IO (Maybe (Maybe Message))
 recv' buffer handle = do
     maybeLine <- hGetLineNonBlocking buffer handle
     case maybeLine of
         Nothing -> return Nothing
         Just line -> do
             B.putStrLn $ "<- " <> line
-            return $ parseMessage line
+            return . Just $ parseMessage line
+
+forMessages :: IO Handle -> (Maybe Message -> IO ()) -> IO ()
+forMessages h f = forever $ h >>= recv >>= f
+
+forMessages' :: (forall a. (Handle -> IO a) -> IO a) -> (Maybe Message -> IO ()) -> IO ()
+forMessages' handle fun = do
+    buffer <- newMVar B.empty
+    forever $ do
+        m <- handle $ recv' buffer
+        case m of
+            Nothing -> return ()
+            Just x -> fun x
